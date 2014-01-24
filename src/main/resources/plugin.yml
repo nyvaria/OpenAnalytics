@@ -1,0 +1,15 @@
+name: ${pom.name}
+description: ${pom.description}
+website: ${pom.url}
+version: ${pom.version}
+author: captbunzo
+
+main: net.nyvaria.openanalytics.OpenAnalytics
+
+commands:
+
+permissions:
+  # Base Permissions
+  
+  # Group Permissions
+

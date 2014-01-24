@@ -1,0 +1,6 @@
+#
+# OpenAnalytics Configuration
+#
+
+use-metrics: true
+
