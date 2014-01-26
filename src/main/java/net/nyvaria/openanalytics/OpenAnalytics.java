@@ -23,8 +23,8 @@ package net.nyvaria.openanalytics;
 
 import java.util.logging.Level;
 
-import net.nyvaria.googleanalytics.MeasurementProtocolClient;
 import net.nyvaria.metrics.MetricsHandler;
+import net.nyvaria.openanalytics.client.ClientList;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,12 +35,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class OpenAnalytics extends JavaPlugin {
 	protected static OpenAnalytics instance = null;
 	
-	// Open Analytics Listener and Metrics Handler
+	// Open Analytics Listener and Tracker
 	protected OpenAnalyticsListener listener = null;
+	protected OpenAnalyticsTracker  tracker  = null;
+	
+	// Metrics Handler
 	protected MetricsHandler        metrics  = null;
 	
-	// Create a Measurements Protocol Client
-	protected MeasurementProtocolClient client = null;
+	// Client List
+	public    ClientList            clientList = null;
 	
 	public static OpenAnalytics getInstance() {
 		return instance;
@@ -55,14 +58,14 @@ public class OpenAnalytics extends JavaPlugin {
 		this.saveDefaultConfig();
 		this.getConfig().options().copyDefaults(true);
 		
-		// Create and register the listener
-		this.listener = OpenAnalyticsListener.getInstance();
-		this.getServer().getPluginManager().registerEvents(this.listener, this);
+		// Create an empty client map
+		this.clientList = new ClientList();
 		
-		// Create the measurements protocol client
-		if (this.getConfig().contains("tracking-id")) {
-			this.client = new MeasurementProtocolClient(this.getConfig().getString("tracking-id"));
-		}
+		// Create and register the listener
+		this.listener = new OpenAnalyticsListener(this);
+		
+		// Create the tracker
+		this.tracker = new OpenAnalyticsTracker(this);
 		
 		// Initialise metrics
 		this.metrics = MetricsHandler.initialiseMetrics(this);
@@ -75,6 +78,12 @@ public class OpenAnalytics extends JavaPlugin {
 	public void onDisable() {
 		// Destroy the metrics handler
 		this.metrics = null;
+		
+		// Destroy the tracker
+		this.tracker = null;
+		
+		// Destroy the client map
+		this.clientList = null;
 		
 		// And null the instance
 		OpenAnalytics.instance = null;

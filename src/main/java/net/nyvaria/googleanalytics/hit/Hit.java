@@ -88,7 +88,7 @@ public abstract class Hit {
 		this.hit_type  = hit_type;
 	}
 	
-	protected List<Parameter> getParameterList() {
+	public List<Parameter> getParameterList() {
 		List<Parameter> list = new ArrayList<Parameter>();
 		
 		// Add the required parameters

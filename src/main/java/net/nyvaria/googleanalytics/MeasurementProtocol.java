@@ -27,8 +27,9 @@ import net.nyvaria.url.parameter.TextParameter;
  * @author Paul Thompson
  *
  */
-public class MeasurementProtocol {
+public abstract class MeasurementProtocol {
 	private static final TextParameter PROTOCOL_VERSION = new TextParameter(MeasurementProtocol.PROTOCOL_VERSION_PARAMETER, "1");
+	public  static final String ENDPOINT = "http://www.google-analytics.com";
 	
 	public static TextParameter getProtocolVersion() {
 		return MeasurementProtocol.PROTOCOL_VERSION;
