@@ -23,6 +23,7 @@ package net.nyvaria.openanalytics;
 
 import java.util.logging.Level;
 
+import net.nyvaria.googleanalytics.MeasurementProtocolClient;
 import net.nyvaria.metrics.MetricsHandler;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -37,6 +38,9 @@ public class OpenAnalytics extends JavaPlugin {
 	// Open Analytics Listener and Metrics Handler
 	protected OpenAnalyticsListener listener = null;
 	protected MetricsHandler        metrics  = null;
+	
+	// Create a Measurements Protocol Client
+	protected MeasurementProtocolClient client = null;
 	
 	public static OpenAnalytics getInstance() {
 		return instance;
@@ -54,6 +58,11 @@ public class OpenAnalytics extends JavaPlugin {
 		// Create and register the listener
 		this.listener = OpenAnalyticsListener.getInstance();
 		this.getServer().getPluginManager().registerEvents(this.listener, this);
+		
+		// Create the measurements protocol client
+		if (this.getConfig().contains("tracking-id")) {
+			this.client = new MeasurementProtocolClient(this.getConfig().getString("tracking-id"));
+		}
 		
 		// Initialise metrics
 		this.metrics = MetricsHandler.initialiseMetrics(this);
