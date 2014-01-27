@@ -21,9 +21,6 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
 
@@ -40,34 +37,34 @@ public class UserTimingHit extends Hit {
 	/**************************/
 	
 	@Parameter(format="text",    required=false, name=MeasurementProtocol.USER_TIMING_CATEGORY)
-	private String user_timing_category;
+	public String user_timing_category;
 
 	@Parameter(format="text",    required=false, name=MeasurementProtocol.USER_TIMING_VARIABLE_NAME)
-	private String user_timing_variable_name;
+	public String user_timing_variable_name;
 
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.USER_TIMING_TIME)
-	private Integer user_timing_time;
+	public Integer user_timing_time;
 
 	@Parameter(format="text",    required=false, name=MeasurementProtocol.USER_TIMING_LABEL)
-	private String user_timing_label;
+	public String user_timing_label;
 
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.PAGE_LOAD_TIME)
-	private Integer page_load_time;
+	public Integer page_load_time;
 
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.DNS_TIME)
-	private Integer dns_time;
+	public Integer dns_time;
 
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.PAGE_DOWNLOAD_TIME)
-	private Integer page_download_time;
+	public Integer page_download_time;
 
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.REDIRECT_RESPONSE_TIME)
-	private Integer redirect_response_time;
+	public Integer redirect_response_time;
 
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.TCP_CONNECT_TIME)
-	private Integer tcp_connect_time;
+	public Integer tcp_connect_time;
 
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.SERVER_RESPONSE_TIME)
-	private Integer server_response_time;
+	public Integer server_response_time;
 	
 	/*************************/
 	/* Constructor & Methods */
@@ -75,34 +72,5 @@ public class UserTimingHit extends Hit {
 	
 	public UserTimingHit(String client_id) {
 		super(client_id, UserTimingHit.HIT_TYPE);
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
-	 */
-	@Override
-	public List<String> getParameterList() {
-		List<String> list = super.getParameterList();
-		
-		for (Field field : this.getClass().getFields()) {
-			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
-			
-			if (parameter != null) {
-				Object value = null;
-				
-				try {
-					value = field.get(this);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				String result = formatParameter(parameter, value);
-				if (result != null) {
-					list.add(result);
-				}
-			}
-		}
-		
-		return list;
 	}
 }

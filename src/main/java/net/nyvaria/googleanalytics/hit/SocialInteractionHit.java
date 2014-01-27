@@ -21,9 +21,6 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
 
@@ -40,13 +37,13 @@ public class SocialInteractionHit extends Hit {
 	/*********************************/
 	
 	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_NETWORK)
-	private String social_network;
+	public String social_network;
 	
 	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_ACTION)
-	private String social_action;
+	public String social_action;
 	
 	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_ACTION_TARGET)
-	private String social_action_target;
+	public String social_action_target;
 	
 	/*************************/
 	/* Constructor & Methods */
@@ -57,34 +54,5 @@ public class SocialInteractionHit extends Hit {
 		this.social_network       = social_network;
 		this.social_action        = social_action;
 		this.social_action_target = social_action_target;
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
-	 */
-	@Override
-	public List<String> getParameterList() {
-		List<String> list = super.getParameterList();
-		
-		for (Field field : this.getClass().getFields()) {
-			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
-			
-			if (parameter != null) {
-				Object value = null;
-				
-				try {
-					value = field.get(this);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				String result = formatParameter(parameter, value);
-				if (result != null) {
-					list.add(result);
-				}
-			}
-		}
-		
-		return list;
 	}
 }

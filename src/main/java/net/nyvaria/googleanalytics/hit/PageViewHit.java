@@ -21,8 +21,6 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
-import java.util.List;
-
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
 
@@ -36,13 +34,5 @@ public class PageViewHit extends Hit {
 	
 	public PageViewHit(String client_id) {
 		super(client_id, PageViewHit.HIT_TYPE);
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
-	 */
-	@Override
-	public List<String> getParameterList() {
-		return super.getParameterList();
 	}
 }

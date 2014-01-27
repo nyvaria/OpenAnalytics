@@ -21,9 +21,6 @@
  */
 package net.nyvaria.googleanalytics.hit.ecommerce;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.googleanalytics.Parameter;
@@ -41,22 +38,22 @@ public class TransactionHit extends Hit {
 	/**************************/
 	
 	@Parameter(format="text",    required=true,   name=MeasurementProtocol.TRANSACTION_ID)
-	private String transaction_id;
+	public String transaction_id;
 	
 	@Parameter(format="text",     required=false, name=MeasurementProtocol.TRANSACTION_AFFILIATION)
-	private String transaction_affiliation;
+	public String transaction_affiliation;
 	
 	@Parameter(format="text",     required=false, name=MeasurementProtocol.TRANSACTION_REVENUE)
-	private String transaction_revenue;
+	public String transaction_revenue;
 	
 	@Parameter(format="currency", required=false, name=MeasurementProtocol.TRANSACTION_SHIPPING)
-	private Float transaction_shipping;
+	public Float transaction_shipping;
 	
 	@Parameter(format="currency", required=false, name=MeasurementProtocol.TRANSACTION_TAX)
-	private Float transaction_tax;
+	public Float transaction_tax;
 	
 	@Parameter(format="text",     required=false, name=MeasurementProtocol.CURRENCY_CODE)
-	private String currency_code;
+	public String currency_code;
 	
 	/*************************/
 	/* Constructor & Methods */
@@ -65,34 +62,5 @@ public class TransactionHit extends Hit {
 	public TransactionHit(String client_id, String transaction_id) {
 		super(client_id, TransactionHit.HIT_TYPE);
 		this.transaction_id = transaction_id;
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
-	 */
-	@Override
-	public List<String> getParameterList() {
-		List<String> list = super.getParameterList();
-		
-		for (Field field : this.getClass().getFields()) {
-			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
-			
-			if (parameter != null) {
-				Object value = null;
-				
-				try {
-					value = field.get(this);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				String result = formatParameter(parameter, value);
-				if (result != null) {
-					list.add(result);
-				}
-			}
-		}
-		
-		return list;
 	}
 }

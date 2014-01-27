@@ -184,12 +184,14 @@ public abstract class Hit {
 	}
 	
 	public List<String> getParameterList() {
+		OpenAnalytics.getInstance().log("DEBUG -- Hit.getParameterList");
 		List<String> list = new ArrayList<String>();
 		
 		for (Field field : this.getClass().getFields()) {
 			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
 			
 			if (parameter != null) {
+				OpenAnalytics.getInstance().log("DEBUG -- Hit.getParameterList -- " + field.getName() + " [not null]");
 				Object value = null;
 				
 				try {
@@ -202,6 +204,8 @@ public abstract class Hit {
 				if (result != null) {
 					list.add(result);
 				}
+			} else {
+				OpenAnalytics.getInstance().log("DEBUG -- Hit.getParameterList -- " + field.getName() + " [null / annotations:" + field.getAnnotations().length + "]");
 			}
 		}
 		

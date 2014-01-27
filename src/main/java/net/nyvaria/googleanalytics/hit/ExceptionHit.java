@@ -21,9 +21,6 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
 
@@ -40,10 +37,10 @@ public class ExceptionHit extends Hit {
 	/************************/
 	
 	@Parameter(format="text",    required=true, name=MeasurementProtocol.EXCEPTION_DESCRIPTION)
-	private String exception_description;
+	public String exception_description;
 	
 	@Parameter(format="boolean", required=true, name=MeasurementProtocol.EXCEPTION_IS_FATAL)
-	private Boolean exception_is_fatal;
+	public Boolean exception_is_fatal;
 	
 	/*************************/
 	/* Constructor & Methods */
@@ -57,34 +54,5 @@ public class ExceptionHit extends Hit {
 	
 	public ExceptionHit(String client_id, String exception_description) {
 		this(client_id, exception_description, false);
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
-	 */
-	@Override
-	public List<String> getParameterList() {
-		List<String> list = super.getParameterList();
-		
-		for (Field field : this.getClass().getFields()) {
-			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
-			
-			if (parameter != null) {
-				Object value = null;
-				
-				try {
-					value = field.get(this);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				String result = formatParameter(parameter, value);
-				if (result != null) {
-					list.add(result);
-				}
-			}
-		}
-		
-		return list;
 	}
 }

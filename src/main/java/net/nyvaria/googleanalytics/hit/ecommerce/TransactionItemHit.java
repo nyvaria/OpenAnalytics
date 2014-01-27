@@ -21,9 +21,6 @@
  */
 package net.nyvaria.googleanalytics.hit.ecommerce;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.googleanalytics.Parameter;
@@ -41,29 +38,29 @@ public class TransactionItemHit extends Hit {
 	/**************************/
 	
 	@Parameter(format="text", required=true,  name=MeasurementProtocol.TRANSACTION_ID)
-	private String transaction_id;
+	public String transaction_id;
 	
 	@Parameter(format="text", required=false, name=MeasurementProtocol.CURRENCY_CODE)
-	private String currency_code;
+	public String currency_code;
 	
 	/*******************/
 	/* Item Parameters */
 	/*******************/
 	
 	@Parameter(format="text",    required=true,  name=MeasurementProtocol.ITEM_NAME)
-	private String item_name;
+	public String item_name;
 	
 	@Parameter(format="float",   required=false, name=MeasurementProtocol.ITEM_PRICE)
-	private Float item_price;
+	public Float item_price;
 	
 	@Parameter(format="integer", required=false, name=MeasurementProtocol.ITEM_QUANTITY)
-	private Integer item_quantity;
+	public Integer item_quantity;
 	
 	@Parameter(format="text",    required=false, name=MeasurementProtocol.ITEM_CODE)
-	private String item_code;
+	public String item_code;
 	
 	@Parameter(format="text",    required=false, name=MeasurementProtocol.ITEM_CATEGORY)
-	private String item_category;
+	public String item_category;
 	
 	/*************************/
 	/* Constructor & Methods */
@@ -73,34 +70,5 @@ public class TransactionItemHit extends Hit {
 		super(client_id, TransactionItemHit.HIT_TYPE);
 		this.transaction_id = transaction_id;
 		this.item_name      = item_name;
-	}
-	
-	/* (non-Javadoc)
-	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
-	 */
-	@Override
-	public List<String> getParameterList() {
-		List<String> list = super.getParameterList();
-		
-		for (Field field : this.getClass().getFields()) {
-			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
-			
-			if (parameter != null) {
-				Object value = null;
-				
-				try {
-					value = field.get(this);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				String result = formatParameter(parameter, value);
-				if (result != null) {
-					list.add(result);
-				}
-			}
-		}
-		
-		return list;
 	}
 }
