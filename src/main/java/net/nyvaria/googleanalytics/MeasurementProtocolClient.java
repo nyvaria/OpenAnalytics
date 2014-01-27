@@ -57,7 +57,7 @@ public class MeasurementProtocolClient {
 			try {
 				instance = new MeasurementProtocolClient(tracking_id);
 			} catch (MalformedURLException e) {
-				OpenAnalytics.getInstance().log(Level.WARNING, "Error with Google Analytics endpoint URL -- " + MeasurementProtocol.ENDPOINT);
+				OpenAnalytics.getInstance().log(Level.WARNING, "MalformedURLException while initializing Measurement Protocol Client (" + MeasurementProtocol.ENDPOINT + ")");
 				e.printStackTrace();
 			}
 		}
@@ -69,8 +69,11 @@ public class MeasurementProtocolClient {
 	}
 	
 	public void send(Hit hit) {
-		String payload_data = StringUtils.join(hit.getParameterList());
 		HttpURLConnection connection = null;
+		String payload_data = StringUtils.join(hit.getParameterList(), "&");
+		
+		// Log the query string for now
+		OpenAnalytics.getInstance().log("Sending data to Google Analytics: " + payload_data);
 		
 		try {
 			// Create and setup the connection
