@@ -26,12 +26,10 @@ package net.nyvaria.googleanalytics;
  *
  */
 public abstract class MeasurementProtocol {
-	//private static final TextParameter PROTOCOL_VERSION = new TextParameter(MeasurementProtocol.PROTOCOL_VERSION, "1");
-	public  static final String ENDPOINT = "http://www.google-analytics.com";
-	
-	//public static TextParameter getProtocolVersion() {
-	//	return MeasurementProtocol.PROTOCOL_VERSION;
-	//}
+	public static final String ENDPOINT = "http://www.google-analytics.com";
+	public static final String ENDPOINT_PROTOCOL_VERSION = "1";
+	public static final String ENDPOINT_ENCODING = "UTF-8";
+	public static final String ENDPOINT_REQUEST_METHOD = "POST";
 	
 	// General Parameters
 	public static final String PROTOCOL_VERSION          = "v";

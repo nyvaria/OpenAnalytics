@@ -21,12 +21,16 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.openanalytics.OpenAnalytics;
 
 /**
  * @author Paul Thompson
@@ -36,6 +40,9 @@ public abstract class Hit {
 	/***********************/
 	/* Required Parameters */
 	/***********************/
+	
+	@Parameter(format="text", required=true, name=MeasurementProtocol.PROTOCOL_VERSION)
+	public String protocol_version;
 	
 	@Parameter(format="text", required=true, name=MeasurementProtocol.CLIENT_ID)
 	public String client_id;
@@ -171,8 +178,9 @@ public abstract class Hit {
 	/*************************/
 	
 	public Hit(String client_id, String hit_type) {
-		this.client_id = client_id;
+		this.protocol_version = MeasurementProtocol.ENDPOINT_PROTOCOL_VERSION;
 		this.hit_type  = hit_type;
+		this.client_id = client_id;
 	}
 	
 	public List<String> getParameterList() {
@@ -206,17 +214,22 @@ public abstract class Hit {
 		if (parameter.required() || value != null) {
 			String text = null;
 			
-			if (parameter.format() == "text") {
+			if (parameter.format().equals("text")) {
 				text = (String) value;
-			} else if (parameter.format() == "boolean") {
+			} else if (parameter.format().equals("boolean")) {
 				text = (((Boolean) value).booleanValue() ? "1" : "0");
-			} else if (parameter.format() == "integer") {
+			} else if (parameter.format().equals("integer")) {
 				text = String.format("%d", ((Integer) value).intValue());
-			} else if (parameter.format() == "currency") {
+			} else if (parameter.format().equals("currency")) {
 				text = String.format("%.2f", ((Float) value).floatValue());
 			}
 			
-			result = parameter.name() + "=" + text;
+			try {
+				result = parameter.name() + "=" + URLEncoder.encode(text, MeasurementProtocol.ENDPOINT_ENCODING);
+			} catch (UnsupportedEncodingException e) {
+				OpenAnalytics.getInstance().log(Level.WARNING, String.format("Error encoding parameter %s with value '%s'", parameter.name(), text));
+				e.printStackTrace();
+			}
 		}
 		
 		return result;

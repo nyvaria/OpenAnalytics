@@ -22,16 +22,14 @@
 package net.nyvaria.googleanalytics;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 import net.nyvaria.googleanalytics.hit.Hit;
@@ -71,34 +69,51 @@ public class MeasurementProtocolClient {
 	}
 	
 	public void send(Hit hit) {
+		String payload_data = StringUtils.join(hit.getParameterList());
+		HttpURLConnection connection = null;
+		
 		try {
-			// Create the request payload data
-			String request_data = StringUtils.join(hit.getParameterList(), "&");
-			
-			// Make the connection
-			HttpURLConnection connection = (HttpURLConnection) endpoint_url.openConnection();
-			
-			// Send the request
-			connection.setRequestMethod("POST");
+			// Create and setup the connection
+			connection = (HttpURLConnection) endpoint_url.openConnection();
+			connection.setRequestMethod(MeasurementProtocol.ENDPOINT_REQUEST_METHOD);
+			connection.setUseCaches(false);
+			connection.setDoInput(true);
 			connection.setDoOutput(true);
-			DataOutputStream request = new DataOutputStream(connection.getOutputStream());
-			request.writeBytes(request_data);
-			request.flush();
-			request.close();
 			
-			// Get the response code and skip the response
-			int responseCode = connection.getResponseCode();
-			InputStream response = connection.getInputStream();
+			// Send request
+			OutputStreamWriter requestWriter = new OutputStreamWriter(connection.getOutputStream(), MeasurementProtocol.ENDPOINT_ENCODING);
+			requestWriter.write(payload_data);
+			requestWriter.flush();
+			requestWriter.close();
 			
-			int available;
-			while ((available = response.available()) != 0) {
-				response.skip(available);
+			// Read response
+			BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), MeasurementProtocol.ENDPOINT_ENCODING));
+			
+			String responseLine;
+			StringBuilder response = new StringBuilder();
+			while ((responseLine = responseReader.readLine()) != null) {
+				response.append(responseLine);
+				response.append('\n');
 			}
-			response.close();
+			responseReader.close();
 			
-		} catch (Exception e) {
-			OpenAnalytics.getInstance().log(Level.WARNING, "Error sending data to Google Analytics");
-			e.printStackTrace();
+			// Consider doing something with the response
+			
+		} catch (UnsupportedEncodingException uee) {
+			OpenAnalytics.getInstance().log(Level.WARNING, "UnsupportedEncodingException while sending data to Google Analytics");
+			uee.printStackTrace();
+			
+		} catch (ProtocolException pe) {
+			OpenAnalytics.getInstance().log(Level.WARNING, "ProtocolException while sending data to Google Analytics");
+			pe.printStackTrace();
+			
+		} catch (IOException ioe) {
+			OpenAnalytics.getInstance().log(Level.WARNING, "IOException while sending data to Google Analytics");
+			ioe.printStackTrace();
+		}
+		
+		if (connection != null) {
+			connection.disconnect();
 		}
 	}
 }
