@@ -21,65 +21,72 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
-import net.nyvaria.url.parameter.IntegerParameter;
-import net.nyvaria.url.parameter.Parameter;
-import net.nyvaria.url.parameter.TextParameter;
+import net.nyvaria.googleanalytics.Parameter;
 
 /**
  * @author Paul Thompson
  *
  */
 public class EventHit extends Hit {
-	private static final TextParameter HIT_TYPE = new TextParameter(MeasurementProtocol.HIT_TYPE_PARAMETER, "event");
+	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
+	private static final String HIT_TYPE = "event";
 	
-	// Event Parameters
-	private TextParameter    event_category;
-	private TextParameter    event_action;
-	private TextParameter    event_label;
-	private IntegerParameter event_value;
+	/********************/
+	/* Event Parameters */
+	/********************/
 	
-	public EventHit(TextParameter client_id, String event_category, String event_action) {
+	@Parameter(format="text", required=true,  name=MeasurementProtocol.EVENT_CATEGORY)
+	private String event_category;
+	
+	@Parameter(format="text", required=true,  name=MeasurementProtocol.EVENT_ACTION)
+	private String event_action;
+	
+	@Parameter(format="text", required=false, name=MeasurementProtocol.EVENT_LABEL)
+	private String event_label;
+	
+	@Parameter(format="text", required=false, name=MeasurementProtocol.EVENT_VALUE)
+	private Integer event_value;
+	
+	/*************************/
+	/* Constructor & Methods */
+	/*************************/
+	
+	public EventHit(String client_id, String event_category, String event_action) {
 		super(client_id, EventHit.HIT_TYPE);
-		this.setEventCategory(event_category);
-		this.setEventAction(event_action);
+		this.event_category = event_category;
+		this.event_action   = event_action;
 	}
 	
 	/* (non-Javadoc)
 	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
 	 */
 	@Override
-	public List<Parameter> getParameterList() {
-		List<Parameter> list = super.getParameterList();
+	public List<String> getParameterList() {
+		List<String> list = super.getParameterList();
 		
-		// Add the required parameters
-		list.add(event_category);
-		list.add(event_action);
-		
-		// Add the optional parameters
-		if (event_label != null) list.add(event_label);
-		if (event_value != null) list.add(event_value);
+		for (Field field : this.getClass().getFields()) {
+			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
+			
+			if (parameter != null) {
+				Object value = null;
+				
+				try {
+					value = field.get(this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				String result = formatParameter(parameter, value);
+				if (result != null) {
+					list.add(result);
+				}
+			}
+		}
 		
 		return list;
 	}
-
-	// Event Parameter Setters
-	public void setEventCategory(String event_category) {
-		this.event_category = new TextParameter(MeasurementProtocol.EVENT_CATEGORY_PARAMETER, event_category);
-	}
-	
-	public void setEventAction(String event_action) {
-		this.event_action = new TextParameter(MeasurementProtocol.EVENT_ACTION_PARAMETER, event_action);
-	}
-	
-	public void setEventLabel(String event_label) {
-		this.event_label = new TextParameter(MeasurementProtocol.EVENT_LABEL_PARAMETER, event_label);
-	}
-	
-	public void setEventValue(int event_value) {
-		this.event_value = new IntegerParameter(MeasurementProtocol.EVENT_VALUE_PARAMETER, event_value);
-	}
-	
 }

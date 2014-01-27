@@ -21,88 +21,86 @@
  */
 package net.nyvaria.googleanalytics.hit.ecommerce;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.hit.Hit;
-import net.nyvaria.url.parameter.CurrencyParameter;
-import net.nyvaria.url.parameter.IntegerParameter;
-import net.nyvaria.url.parameter.Parameter;
-import net.nyvaria.url.parameter.TextParameter;
+import net.nyvaria.googleanalytics.Parameter;
 
 /**
  * @author Paul Thompson
  *
  */
 public class TransactionItemHit extends Hit {
-	private static final TextParameter HIT_TYPE = new TextParameter(MeasurementProtocol.HIT_TYPE_PARAMETER, "item");
+	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
+	private static final String HIT_TYPE = "item";
 	
-	// Transaction Parameters
-	private TextParameter     transaction_id;
-	private TextParameter     currency_code;
+	/**************************/
+	/* Transaction Parameters */
+	/**************************/
 	
-	// Item Parameters
-	private TextParameter     item_name;
-	private CurrencyParameter item_price;
-	private IntegerParameter  item_quantity;
-	private TextParameter     item_code;
-	private TextParameter     item_category;
+	@Parameter(format="text", required=true,  name=MeasurementProtocol.TRANSACTION_ID)
+	private String transaction_id;
 	
-	public TransactionItemHit(TextParameter client_id, String transaction_id, String item_name) {
+	@Parameter(format="text", required=false, name=MeasurementProtocol.CURRENCY_CODE)
+	private String currency_code;
+	
+	/*******************/
+	/* Item Parameters */
+	/*******************/
+	
+	@Parameter(format="text",    required=true,  name=MeasurementProtocol.ITEM_NAME)
+	private String item_name;
+	
+	@Parameter(format="float",   required=false, name=MeasurementProtocol.ITEM_PRICE)
+	private Float item_price;
+	
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.ITEM_QUANTITY)
+	private Integer item_quantity;
+	
+	@Parameter(format="text",    required=false, name=MeasurementProtocol.ITEM_CODE)
+	private String item_code;
+	
+	@Parameter(format="text",    required=false, name=MeasurementProtocol.ITEM_CATEGORY)
+	private String item_category;
+	
+	/*************************/
+	/* Constructor & Methods */
+	/*************************/
+	
+	public TransactionItemHit(String client_id, String transaction_id, String item_name) {
 		super(client_id, TransactionItemHit.HIT_TYPE);
-		this.setTransactionID(transaction_id);
-		this.setItemName(item_name);
+		this.transaction_id = transaction_id;
+		this.item_name      = item_name;
 	}
 	
 	/* (non-Javadoc)
 	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
 	 */
 	@Override
-	public List<Parameter> getParameterList() {
-		List<Parameter> list = super.getParameterList();
+	public List<String> getParameterList() {
+		List<String> list = super.getParameterList();
 		
-		// Add the required parameters
-		list.add(transaction_id);
-		list.add(item_name);
-		
-		// Add the optional parameters
-		if (currency_code != null) list.add(currency_code);
-		if (item_name     != null) list.add(item_name);
-		if (item_price    != null) list.add(item_price);
-		if (item_quantity != null) list.add(item_quantity);
-		if (item_code     != null) list.add(item_code);
-		if (item_category != null) list.add(item_category);
+		for (Field field : this.getClass().getFields()) {
+			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
+			
+			if (parameter != null) {
+				Object value = null;
+				
+				try {
+					value = field.get(this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				String result = formatParameter(parameter, value);
+				if (result != null) {
+					list.add(result);
+				}
+			}
+		}
 		
 		return list;
-	}
-
-	// Transaction Parameters
-	public void setTransactionID(String transaction_id) {
-		this.transaction_id = new TextParameter(MeasurementProtocol.TRANSACTION_ID_PARAMETER, transaction_id);
-	}
-	
-	public void setCurrencyCode(String currency_code) {
-		this.currency_code = new TextParameter(MeasurementProtocol.CURRENCY_CODE_PARAMETER, currency_code);
-	}
-	
-	// Item Parameters
-	public void setItemName(String item_name) {
-		this.item_name = new TextParameter(MeasurementProtocol.ITEM_NAME_PARAMETER, item_name);
-	}
-	
-	public void setItemPrice(float item_price) {
-		this.item_price = new CurrencyParameter(MeasurementProtocol.ITEM_PRICE_PARAMETER, item_price);
-	}
-	
-	public void setItemQuantity(int item_quantity) {
-		this.item_quantity = new IntegerParameter(MeasurementProtocol.ITEM_QUANTITY_PARAMETER, item_quantity);
-	}
-	
-	public void setItemCode(String item_code) {
-		this.item_code = new TextParameter(MeasurementProtocol.ITEM_CODE_PARAMETER, item_code);
-	}
-	
-	public void setItemCategory(String item_category) {
-		this.item_category = new TextParameter(MeasurementProtocol.ITEM_CATEGORY_PARAMETER, item_category);
 	}
 }

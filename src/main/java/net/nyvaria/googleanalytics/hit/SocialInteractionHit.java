@@ -21,56 +21,70 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
-import net.nyvaria.url.parameter.Parameter;
-import net.nyvaria.url.parameter.TextParameter;
+import net.nyvaria.googleanalytics.Parameter;
 
 /**
  * @author Paul Thompson
  *
  */
 public class SocialInteractionHit extends Hit {
-	private static final TextParameter HIT_TYPE = new TextParameter(MeasurementProtocol.HIT_TYPE_PARAMETER, "social");
+	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
+	private static final String HIT_TYPE = "social";
 	
-	// Social Interaction Parameters
-	private TextParameter social_network;
-	private TextParameter social_action;
-	private TextParameter social_action_target;
+	/*********************************/
+	/* Social Interaction Parameters */
+	/*********************************/
 	
-	public SocialInteractionHit(TextParameter client_id, String social_network, String social_action, String social_action_target) {
+	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_NETWORK)
+	private String social_network;
+	
+	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_ACTION)
+	private String social_action;
+	
+	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_ACTION_TARGET)
+	private String social_action_target;
+	
+	/*************************/
+	/* Constructor & Methods */
+	/*************************/
+	
+	public SocialInteractionHit(String client_id, String social_network, String social_action, String social_action_target) {
 		super(client_id, SocialInteractionHit.HIT_TYPE);
-		this.setSocialNetwork(social_network);
-		this.setSocialAction(social_action);
-		this.setSocialActionTarget(social_action_target);
+		this.social_network       = social_network;
+		this.social_action        = social_action;
+		this.social_action_target = social_action_target;
 	}
 	
 	/* (non-Javadoc)
 	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
 	 */
 	@Override
-	public List<Parameter> getParameterList() {
-		List<Parameter> list = super.getParameterList();
+	public List<String> getParameterList() {
+		List<String> list = super.getParameterList();
 		
-		// Add the required parameters
-		list.add(social_network);
-		list.add(social_action);
-		list.add(social_action_target);
+		for (Field field : this.getClass().getFields()) {
+			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
+			
+			if (parameter != null) {
+				Object value = null;
+				
+				try {
+					value = field.get(this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				String result = formatParameter(parameter, value);
+				if (result != null) {
+					list.add(result);
+				}
+			}
+		}
 		
 		return list;
-	}
-
-	// Social Interaction Parameters
-	public void setSocialNetwork(String social_network) {
-		this.social_network = new TextParameter(MeasurementProtocol.SOCIAL_NETWORK_PARAMETER, social_network);
-	}
-	
-	public void setSocialAction(String social_action) {
-		this.social_action = new TextParameter(MeasurementProtocol.SOCIAL_ACTION_PARAMETER, social_action);
-	}
-	
-	public void setSocialActionTarget(String social_action_target) {
-		this.social_action_target = new TextParameter(MeasurementProtocol.SOCIAL_ACTION_TARGET_PARAMETER, social_action_target);
 	}
 }

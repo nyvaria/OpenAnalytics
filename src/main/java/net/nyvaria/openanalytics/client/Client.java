@@ -24,7 +24,7 @@ package net.nyvaria.openanalytics.client;
 import java.util.UUID;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
-import net.nyvaria.url.parameter.TextParameter;
+import net.nyvaria.googleanalytics.Parameter;
 
 import org.bukkit.entity.Player;
 
@@ -33,21 +33,28 @@ import org.bukkit.entity.Player;
  *
  */
 public class Client {
-	private final Player   player;
-	private UUID           unique_id; // These needs to be changed to something that Google cannot use to identify the client (i.e. our own random UUID)
-	private TextParameter  client_id;
+	private final Player player;
+	
+	// According to the Google Measurement Protocol Policy, the UUID used for the Client ID has to be something
+	// that Google cannot use to identify the person involved. For expediency, this initial hack will use the
+	// Minecraft user's UUID. However, that will need to change. What we will do is generate a random UUID per
+	// user and save that in a data file of some sorts.
+	private UUID unique_id;
+	
+	@Parameter(format="text", required=true, name=MeasurementProtocol.CLIENT_ID)
+	private String client_id;
 	
 	public Client(Player player) {
 		this.player    = player;
 		this.unique_id = player.getUniqueId();
-		this.client_id = new TextParameter(MeasurementProtocol.CLIENT_ID_PARAMETER, unique_id.toString());
+		this.client_id = unique_id.toString();
 	}
 	
 	public Player getPlayer() {
 		return player;
 	}
 	
-	public TextParameter getClientID() {
+	public String getClientID() {
 		return client_id;
 	}
 }

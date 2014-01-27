@@ -21,31 +21,41 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
-import net.nyvaria.url.parameter.BooleanParameter;
-import net.nyvaria.url.parameter.Parameter;
-import net.nyvaria.url.parameter.TextParameter;
+import net.nyvaria.googleanalytics.Parameter;
 
 /**
  * @author Paul Thompson
  *
  */
 public class ExceptionHit extends Hit {
-	private static final TextParameter HIT_TYPE = new TextParameter(MeasurementProtocol.HIT_TYPE_PARAMETER, "exception");
+	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
+	private static final String HIT_TYPE = "exception";
 	
-	// Exception Parameters
-	private TextParameter    exception_description;
-	private BooleanParameter exception_is_fatal;
+	/************************/
+	/* Exception Parameters */
+	/************************/
 	
-	public ExceptionHit(TextParameter client_id, String exception_description, boolean exception_is_fatal) {
+	@Parameter(format="text",    required=true, name=MeasurementProtocol.EXCEPTION_DESCRIPTION)
+	private String exception_description;
+	
+	@Parameter(format="boolean", required=true, name=MeasurementProtocol.EXCEPTION_IS_FATAL)
+	private Boolean exception_is_fatal;
+	
+	/*************************/
+	/* Constructor & Methods */
+	/*************************/
+	
+	public ExceptionHit(String client_id, String exception_description, boolean exception_is_fatal) {
 		super(client_id, ExceptionHit.HIT_TYPE);
-		setExceptionDescription(exception_description);
-		setExceptionIsFatal(exception_is_fatal);
+		this.exception_description = exception_description;
+		this.exception_is_fatal    = exception_is_fatal;
 	}
 	
-	public ExceptionHit(TextParameter client_id, String exception_description) {
+	public ExceptionHit(String client_id, String exception_description) {
 		this(client_id, exception_description, false);
 	}
 	
@@ -53,22 +63,28 @@ public class ExceptionHit extends Hit {
 	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
 	 */
 	@Override
-	public List<Parameter> getParameterList() {
-		List<Parameter> list = super.getParameterList();
+	public List<String> getParameterList() {
+		List<String> list = super.getParameterList();
 		
-		// Add the required parameters
-		list.add(exception_description);
-		list.add(exception_is_fatal);
+		for (Field field : this.getClass().getFields()) {
+			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
+			
+			if (parameter != null) {
+				Object value = null;
+				
+				try {
+					value = field.get(this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				String result = formatParameter(parameter, value);
+				if (result != null) {
+					list.add(result);
+				}
+			}
+		}
 		
 		return list;
-	}
-	
-	// User Timing Parameter Setters
-	public void setExceptionDescription(String exception_description) {
-		this.exception_description = new TextParameter(MeasurementProtocol.EXCEPTION_DESCRIPTION_PARAMETER, exception_description);
-	}
-	
-	public void setExceptionIsFatal(boolean exception_is_fatal) {
-		this.exception_is_fatal = new BooleanParameter(MeasurementProtocol.EXCEPTION_IS_FATAL_PARAMETER, exception_is_fatal);
 	}
 }

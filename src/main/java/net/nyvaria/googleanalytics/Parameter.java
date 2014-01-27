@@ -19,22 +19,14 @@
 /**
  * 
  */
-package net.nyvaria.url.parameter;
+package net.nyvaria.googleanalytics;
 
 /**
  * @author Paul Thompson
  *
  */
-public abstract class Parameter {
-	protected String parameter = null;
-	
-	protected Parameter(String parameter) {
-		this.parameter = parameter;
-	}
-		
-	abstract protected String getValue();
-	
-	public String toString() {
-		return parameter + "=" + getValue();
-	}
+public @interface Parameter {
+	String name();
+	String format();
+	boolean required();
 }

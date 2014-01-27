@@ -21,111 +21,109 @@
  */
 package net.nyvaria.googleanalytics;
 
-import net.nyvaria.url.parameter.TextParameter;
-
 /**
  * @author Paul Thompson
  *
  */
 public abstract class MeasurementProtocol {
-	private static final TextParameter PROTOCOL_VERSION = new TextParameter(MeasurementProtocol.PROTOCOL_VERSION_PARAMETER, "1");
+	//private static final TextParameter PROTOCOL_VERSION = new TextParameter(MeasurementProtocol.PROTOCOL_VERSION, "1");
 	public  static final String ENDPOINT = "http://www.google-analytics.com";
 	
-	public static TextParameter getProtocolVersion() {
-		return MeasurementProtocol.PROTOCOL_VERSION;
-	}
+	//public static TextParameter getProtocolVersion() {
+	//	return MeasurementProtocol.PROTOCOL_VERSION;
+	//}
 	
 	// General Parameters
-	public static final String PROTOCOL_VERSION_PARAMETER          = "v";
-	public static final String TRACKING_ID_PARAMETER               = "tid";
-	public static final String ANONYMIZE_IP_PARAMETER              = "aip";
-	public static final String QUEUE_TIME_PARAMETER                = "qt";
-	public static final String CACHE_BUSTER_PARAMETER              = "z";
+	public static final String PROTOCOL_VERSION          = "v";
+	public static final String TRACKING_ID               = "tid";
+	public static final String ANONYMIZE_IP              = "aip";
+	public static final String QUEUE_TIME                = "qt";
+	public static final String CACHE_BUSTER              = "z";
 
 	// Visitor Parameters
-	public static final String CLIENT_ID_PARAMETER                 = "cid";
+	public static final String CLIENT_ID                 = "cid";
 	
 	// Session Parameters
-	public static final String SESSION_CONTROL_PARAMETER           = "sc";
+	public static final String SESSION_CONTROL           = "sc";
 	
 	// Traffic Source Parameters
-	public static final String DOCUMENT_REFERRER_PARAMETER         = "dr";
-	public static final String CAMPAIGN_NAME_PARAMETER             = "cn";
-	public static final String CAMPAIGN_SOURCE_PARAMETER           = "cs";
-	public static final String CAMPAIGN_MEDIUM_PARAMETER           = "cm";
-	public static final String CAMPAIGN_KEYWORD_PARAMETER          = "ck";
-	public static final String CAMPAIGN_CONTENT_PARAMETER          = "cc";
-	public static final String CAMPAIGN_ID_PARAMETER               = "ci";
-	public static final String ADWORDS_ID_PARAMETER                = "gclid";
-	public static final String DISPLAY_ADS_ID_PARAMETER            = "dclid";
+	public static final String DOCUMENT_REFERRER         = "dr";
+	public static final String CAMPAIGN_NAME             = "cn";
+	public static final String CAMPAIGN_SOURCE           = "cs";
+	public static final String CAMPAIGN_MEDIUM           = "cm";
+	public static final String CAMPAIGN_KEYWORD          = "ck";
+	public static final String CAMPAIGN_CONTENT          = "cc";
+	public static final String CAMPAIGN_ID               = "ci";
+	public static final String ADWORDS_ID                = "gclid";
+	public static final String DISPLAY_ADS_ID            = "dclid";
 	
 	// System Info Parameters
-	public static final String SCREEN_RESOLUTION_PARAMETER         = "sr";
-	public static final String VIEWPORT_SIZE_PARAMETER             = "vp";
-	public static final String DOCUMENT_ENCODING_PARAMETER         = "de";
-	public static final String SCREEN_COLORS_PARAMETER             = "sd";
-	public static final String USER_LANGUAGE_PARAMETER             = "ul";
-	public static final String JAVA_ENABLED_PARAMETER              = "je";
-	public static final String FLASH_VERSION_PARAMETER             = "fl";
+	public static final String SCREEN_RESOLUTION         = "sr";
+	public static final String VIEWPORT_SIZE             = "vp";
+	public static final String DOCUMENT_ENCODING         = "de";
+	public static final String SCREEN_COLORS             = "sd";
+	public static final String USER_LANGUAGE             = "ul";
+	public static final String JAVA_ENABLED              = "je";
+	public static final String FLASH_VERSION             = "fl";
 	
 	// Hit Parameters
-	public static final String HIT_TYPE_PARAMETER                  = "t";
-	public static final String NON_INTERACTION_HIT_PARAMETER       = "ni";
+	public static final String HIT_TYPE                  = "t";
+	public static final String NON_INTERACTION_HIT       = "ni";
 	
 	// Content Information Parameters
-	public static final String DOCUMENT_LOCATION_URL_PARAMETER     = "dl";
-	public static final String DOCUMENT_HOST_NAME_PARAMETER        = "dh";
-	public static final String DOCUMENT_PATH_PARAMETER             = "dp";
-	public static final String DOCUMENT_TITLE_PARAMETER            = "dt";
-	public static final String CONTENT_DESCRIPTION_PARAMETER       = "cd";
-	public static final String LINK_ID_PARAMETER                   = "linkid";
+	public static final String DOCUMENT_LOCATION_URL     = "dl";
+	public static final String DOCUMENT_HOST_NAME        = "dh";
+	public static final String DOCUMENT_PATH             = "dp";
+	public static final String DOCUMENT_TITLE            = "dt";
+	public static final String CONTENT_DESCRIPTION       = "cd";
+	public static final String LINK_ID                   = "linkid";
 	
 	// Event Tracking Parameters
-	public static final String EVENT_CATEGORY_PARAMETER            = "ec";
-	public static final String EVENT_ACTION_PARAMETER              = "ea";
-	public static final String EVENT_LABEL_PARAMETER               = "el";
-	public static final String EVENT_VALUE_PARAMETER               = "ev";
+	public static final String EVENT_CATEGORY            = "ec";
+	public static final String EVENT_ACTION              = "ea";
+	public static final String EVENT_LABEL               = "el";
+	public static final String EVENT_VALUE               = "ev";
 	
 	// E-Commerce Parameters
-	public static final String TRANSACTION_ID_PARAMETER            = "ti";
-	public static final String TRANSACTION_AFFILIATION_PARAMETER   = "ta";
-	public static final String TRANSACTION_REVENUE_PARAMETER       = "tr";
-	public static final String TRANSACTION_SHIPPING_PARAMETER      = "ts";
-	public static final String TRANSACTION_TAX_PARAMETER           = "tt";
-	public static final String ITEM_NAME_PARAMETER                 = "in";
-	public static final String ITEM_PRICE_PARAMETER                = "ip";
-	public static final String ITEM_QUANTITY_PARAMETER             = "iq";
-	public static final String ITEM_CODE_PARAMETER                 = "ic";
-	public static final String ITEM_CATEGORY_PARAMETER             = "iv";
-	public static final String CURRENCY_CODE_PARAMETER             = "cu";
+	public static final String TRANSACTION_ID            = "ti";
+	public static final String TRANSACTION_AFFILIATION   = "ta";
+	public static final String TRANSACTION_REVENUE       = "tr";
+	public static final String TRANSACTION_SHIPPING      = "ts";
+	public static final String TRANSACTION_TAX           = "tt";
+	public static final String ITEM_NAME                 = "in";
+	public static final String ITEM_PRICE                = "ip";
+	public static final String ITEM_QUANTITY             = "iq";
+	public static final String ITEM_CODE                 = "ic";
+	public static final String ITEM_CATEGORY             = "iv";
+	public static final String CURRENCY_CODE             = "cu";
 	
 	// Social Interaction Parameters
-	public static final String SOCIAL_NETWORK_PARAMETER            = "sn";
-	public static final String SOCIAL_ACTION_PARAMETER             = "sa";
-	public static final String SOCIAL_ACTION_TARGET_PARAMETER      = "st";
+	public static final String SOCIAL_NETWORK            = "sn";
+	public static final String SOCIAL_ACTION             = "sa";
+	public static final String SOCIAL_ACTION_TARGET      = "st";
 	
 	// Timing Parameters
-	public static final String USER_TIMING_CATEGORY_PARAMETER      = "utc";
-	public static final String USER_TIMING_VARIABLE_NAME_PARAMETER = "utv";
-	public static final String USER_TIMING_TIME_PARAMETER          = "utt";
-	public static final String USER_TIMING_LABEL_PARAMETER         = "utl";
-	public static final String PAGE_LOAD_TIME_PARAMETER            = "plt";
-	public static final String DNS_TIME_PARAMETER                  = "dns";
-	public static final String PAGE_DOWNLOAD_TIME_PARAMETER        = "pdt";
-	public static final String REDIRECT_RESPONSE_TIME_PARAMETER    = "rrt";
-	public static final String TCP_CONNECT_TIME_PARAMETER          = "tcp";
-	public static final String SERVER_RESPONSE_TIME_PARAMETER      = "srt";
+	public static final String USER_TIMING_CATEGORY      = "utc";
+	public static final String USER_TIMING_VARIABLE_NAME = "utv";
+	public static final String USER_TIMING_TIME          = "utt";
+	public static final String USER_TIMING_LABEL         = "utl";
+	public static final String PAGE_LOAD_TIME            = "plt";
+	public static final String DNS_TIME                  = "dns";
+	public static final String PAGE_DOWNLOAD_TIME        = "pdt";
+	public static final String REDIRECT_RESPONSE_TIME    = "rrt";
+	public static final String TCP_CONNECT_TIME          = "tcp";
+	public static final String SERVER_RESPONSE_TIME      = "srt";
 	
 	// Exception Parameters
-	public static final String EXCEPTION_DESCRIPTION_PARAMETER     = "exd";
-	public static final String EXCEPTION_IS_FATAL_PARAMETER        = "exf";
+	public static final String EXCEPTION_DESCRIPTION     = "exd";
+	public static final String EXCEPTION_IS_FATAL        = "exf";
 	
 	// Custom Dimension / Metric Parameter Prefixes
-	public static final String CUSTOM_DIMENSION_PARAMETER_PREFIX   = "cd";
-	public static final String CUSTOM_METRIC_PARAMETER_PREFIX      = "cm";
+	public static final String CUSTOM_DIMENSION_PREFIX   = "cd";
+	public static final String CUSTOM_METRIC_PREFIX      = "cm";
 	
 	// Content Experiment Parameters
-	public static final String EXPERIMENT_ID_PARAMETER             = "xid";
-	public static final String EXPERIMENT_VARIANT_PARAMETER        = "xvar";
+	public static final String EXPERIMENT_ID             = "xid";
+	public static final String EXPERIMENT_VARIANT        = "xvar";
 	
 }

@@ -36,8 +36,6 @@ import java.util.logging.Level;
 
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.openanalytics.OpenAnalytics;
-import net.nyvaria.url.parameter.Parameter;
-import net.nyvaria.url.parameter.TextParameter;
 import net.nyvaria.utils.StringUtils;
 
 /**
@@ -46,11 +44,13 @@ import net.nyvaria.utils.StringUtils;
  */
 public class MeasurementProtocolClient {
 	private static MeasurementProtocolClient instance;
-	private TextParameter tracking_id;
-	private URL           endpoint_url;
+	private URL endpoint_url;
+	
+	@Parameter(format="text", required=true, name=MeasurementProtocol.TRACKING_ID)
+	public String tracking_id;
 	
 	private MeasurementProtocolClient(String tracking_id) throws MalformedURLException {
-		setTrackingID(tracking_id);
+		this.tracking_id = tracking_id;
 		endpoint_url = new URL(MeasurementProtocol.ENDPOINT);
 	}
 	
@@ -73,11 +73,7 @@ public class MeasurementProtocolClient {
 	public void send(Hit hit) {
 		try {
 			// Create the request payload data
-			List<String> list = new ArrayList<String>();
-			for (Parameter parameter : hit.getParameterList()) {
-				list.add(parameter.toString());
-			}
-			String request_data = StringUtils.join(list, "&");
+			String request_data = StringUtils.join(hit.getParameterList(), "&");
 			
 			// Make the connection
 			HttpURLConnection connection = (HttpURLConnection) endpoint_url.openConnection();
@@ -104,19 +100,5 @@ public class MeasurementProtocolClient {
 			OpenAnalytics.getInstance().log(Level.WARNING, "Error sending data to Google Analytics");
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * @return the tracking_id
-	 */
-	public TextParameter getTrackingID() {
-		return tracking_id;
-	}
-	
-	/**
-	 * @param tracking_id the tracking_id to set
-	 */
-	private void setTrackingID(String tracking_id) {
-		this.tracking_id = new TextParameter(MeasurementProtocol.TRACKING_ID_PARAMETER, tracking_id);
 	}
 }

@@ -24,17 +24,17 @@ package net.nyvaria.googleanalytics.hit;
 import java.util.List;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
-import net.nyvaria.url.parameter.Parameter;
-import net.nyvaria.url.parameter.TextParameter;
+import net.nyvaria.googleanalytics.Parameter;
 
 /**
  * @author Paul Thompson
  *
  */
 public class PageViewHit extends Hit {
-	private static final TextParameter HIT_TYPE = new TextParameter(MeasurementProtocol.HIT_TYPE_PARAMETER, "pageview");
+	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
+	private static final String HIT_TYPE = "pageview";
 	
-	public PageViewHit(TextParameter client_id) {
+	public PageViewHit(String client_id) {
 		super(client_id, PageViewHit.HIT_TYPE);
 	}
 	
@@ -42,9 +42,7 @@ public class PageViewHit extends Hit {
 	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
 	 */
 	@Override
-	public List<Parameter> getParameterList() {
-		List<Parameter> list = super.getParameterList();
-		
-		return list;
+	public List<String> getParameterList() {
+		return super.getParameterList();
 	}
 }

@@ -21,33 +21,59 @@
  */
 package net.nyvaria.googleanalytics.hit;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
-import net.nyvaria.url.parameter.IntegerParameter;
-import net.nyvaria.url.parameter.Parameter;
-import net.nyvaria.url.parameter.TextParameter;
+import net.nyvaria.googleanalytics.Parameter;
 
 /**
  * @author Paul Thompson
  *
  */
 public class UserTimingHit extends Hit {
-	private static final TextParameter HIT_TYPE = new TextParameter(MeasurementProtocol.HIT_TYPE_PARAMETER, "timing");
+	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
+	private static final String HIT_TYPE = "timing";
 	
-	// User Timing Parameters
-	private TextParameter    user_timing_category;
-	private TextParameter    user_timing_variable_name;
-	private IntegerParameter user_timing_time;
-	private TextParameter    user_timing_label;
-	private IntegerParameter page_load_time;
-	private IntegerParameter dns_time;
-	private IntegerParameter page_download_time;
-	private IntegerParameter redirect_response_time;
-	private IntegerParameter tcp_connect_time;
-	private IntegerParameter server_response_time;
+	/**************************/
+	/* User Timing Parameters */
+	/**************************/
 	
-	public UserTimingHit(TextParameter client_id) {
+	@Parameter(format="text",    required=false, name=MeasurementProtocol.USER_TIMING_CATEGORY)
+	private String user_timing_category;
+
+	@Parameter(format="text",    required=false, name=MeasurementProtocol.USER_TIMING_VARIABLE_NAME)
+	private String user_timing_variable_name;
+
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.USER_TIMING_TIME)
+	private Integer user_timing_time;
+
+	@Parameter(format="text",    required=false, name=MeasurementProtocol.USER_TIMING_LABEL)
+	private String user_timing_label;
+
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.PAGE_LOAD_TIME)
+	private Integer page_load_time;
+
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.DNS_TIME)
+	private Integer dns_time;
+
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.PAGE_DOWNLOAD_TIME)
+	private Integer page_download_time;
+
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.REDIRECT_RESPONSE_TIME)
+	private Integer redirect_response_time;
+
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.TCP_CONNECT_TIME)
+	private Integer tcp_connect_time;
+
+	@Parameter(format="integer", required=false, name=MeasurementProtocol.SERVER_RESPONSE_TIME)
+	private Integer server_response_time;
+	
+	/*************************/
+	/* Constructor & Methods */
+	/*************************/
+	
+	public UserTimingHit(String client_id) {
 		super(client_id, UserTimingHit.HIT_TYPE);
 	}
 	
@@ -55,62 +81,28 @@ public class UserTimingHit extends Hit {
 	 * @see net.nyvaria.googleanalytics.hit.Hit#getParameterList()
 	 */
 	@Override
-	public List<Parameter> getParameterList() {
-		List<Parameter> list = super.getParameterList();
+	public List<String> getParameterList() {
+		List<String> list = super.getParameterList();
 		
-		// Add the optional parameters
-		if (user_timing_category      != null) list.add(user_timing_category);
-		if (user_timing_variable_name != null) list.add(user_timing_variable_name);
-		if (user_timing_time          != null) list.add(user_timing_time);
-		if (user_timing_label         != null) list.add(user_timing_label);
-		if (page_load_time            != null) list.add(page_load_time);
-		if (dns_time                  != null) list.add(dns_time);
-		if (page_download_time        != null) list.add(page_download_time);
-		if (redirect_response_time    != null) list.add(redirect_response_time);
-		if (tcp_connect_time          != null) list.add(tcp_connect_time);
-		if (server_response_time      != null) list.add(server_response_time);
+		for (Field field : this.getClass().getFields()) {
+			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
+			
+			if (parameter != null) {
+				Object value = null;
+				
+				try {
+					value = field.get(this);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				String result = formatParameter(parameter, value);
+				if (result != null) {
+					list.add(result);
+				}
+			}
+		}
 		
 		return list;
-	}
-
-	// User Timing Parameter Setters
-	public void setUserTimingCategory(String user_timing_category) {
-		this.user_timing_category = new TextParameter(MeasurementProtocol.USER_TIMING_CATEGORY_PARAMETER, user_timing_category);
-	}
-
-	public void setUserTimingVariableName(String user_timing_variable_name) {
-		this.user_timing_variable_name = new TextParameter(MeasurementProtocol.USER_TIMING_VARIABLE_NAME_PARAMETER, user_timing_variable_name);
-	}
-
-	public void setUserTimingTime(int user_timing_time) {
-		this.user_timing_time = new IntegerParameter(MeasurementProtocol.USER_TIMING_TIME_PARAMETER, user_timing_time);
-	}
-
-	public void setUserTimingLabel(String user_timing_label) {
-		this.user_timing_label = new TextParameter(MeasurementProtocol.USER_TIMING_LABEL_PARAMETER, user_timing_label);
-	}
-
-	public void setPageLoadTime(int page_load_time) {
-		this.page_load_time = new IntegerParameter(MeasurementProtocol.PAGE_LOAD_TIME_PARAMETER, page_load_time);
-	}
-
-	public void setDNSTime(int dns_time) {
-		this.dns_time = new IntegerParameter(MeasurementProtocol.DNS_TIME_PARAMETER, dns_time);
-	}
-
-	public void setPageDownloadTime(int page_download_time) {
-		this.page_download_time = new IntegerParameter(MeasurementProtocol.PAGE_DOWNLOAD_TIME_PARAMETER, page_download_time);
-	}
-
-	public void setRedirectResponseTime(int redirect_response_time) {
-		this.redirect_response_time = new IntegerParameter(MeasurementProtocol.REDIRECT_RESPONSE_TIME_PARAMETER, redirect_response_time);
-	}
-
-	public void setTCPConnectTime(int tcp_connect_time) {
-		this.tcp_connect_time = new IntegerParameter(MeasurementProtocol.TCP_CONNECT_TIME_PARAMETER, tcp_connect_time);
-	}
-
-	public void setServerResponseTime(int server_response_time) {
-		this.server_response_time = new IntegerParameter(MeasurementProtocol.SERVER_RESPONSE_TIME_PARAMETER, server_response_time);
 	}
 }
