@@ -72,22 +72,28 @@ public class Client {
 	
 	public EventHit createPlayerJoinHit() {
 		EventHit eventHit = new EventHit(this, "Player Connection", "Join");
-		eventHit.event_label = "Player Join";
-		eventHit.session_control = "start";
+		eventHit.event_label           = "Player Join";
+		eventHit.session_control       = "start";
+		eventHit.document_location_url = getWorldURL();
+		eventHit.document_title        = getWorldTitle();
 		return eventHit;
 	}
 	
 	public EventHit createPlayerQuitHit() {
 		EventHit eventHit = new EventHit(this, "Player Connection", "Quit");
-		eventHit.event_label = "Player Quit";
-		eventHit.session_control = "end";
+		eventHit.event_label           = "Player Quit";
+		eventHit.session_control       = "end";
+		eventHit.document_location_url = getWorldURL();
+		eventHit.document_title        = getWorldTitle();
 		return eventHit;
 	}
 	
 	public EventHit createPlayerKickHit() {
 		EventHit eventHit = new EventHit(this, "Player Connection", "Kick");
-		eventHit.event_label = "Player Kick";
-		eventHit.session_control = "end";
+		eventHit.event_label           = "Player Kick";
+		eventHit.session_control       = "end";
+		eventHit.document_location_url = getWorldURL();
+		eventHit.document_title        = getWorldTitle();
 		return eventHit;
 	}
 	
@@ -97,9 +103,23 @@ public class Client {
 	
 	public PageViewHit createWorldHit() {
 		PageViewHit worldHit = new PageViewHit(this);
-		worldHit.document_path  = "/world/" + this.getPlayer().getLocation().getWorld().getName();
-		worldHit.document_title = "World - " + MultiverseHook.getWorldAlias(this.getPlayer().getLocation().getWorld().getName());
-		worldHit.document_host_name = MeasurementProtocolClient.getInstance().document_host_name;
+		worldHit.document_location_url = getWorldURL();
+		worldHit.document_title = getWorldTitle();
 		return worldHit;
+	}
+	
+	/**********************/
+	/* Supporting Methods */
+	/**********************/
+	
+	private String getWorldURL() {
+		return "http://"
+				+ MeasurementProtocolClient.getInstance().document_host_name
+				+ "/world/"
+				+ this.player.getLocation().getWorld().getName();
+	}
+	
+	private String getWorldTitle() {
+		return "World - " + MultiverseHook.getWorldAlias(this.player);
 	}
 }

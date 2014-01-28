@@ -6,7 +6,7 @@
 	
 	<groupId>net.nyvaria</groupId>
 	<artifactId>OpenAnalytics</artifactId>
-	<version>0.1.01</version>
+	<version>0.1.02</version>
 	
 	<name>OpenAnalytics</name>
 	<url>https://github.com/nyvaria/OpenAnalytics</url>
@@ -54,12 +54,10 @@
 			<id>OnARandomBox</id>
 			<url>http://repo.onarandombox.com/content/groups/public</url>
 		</repository>
-		<!--
 		<repository>
 			<id>Plugin Metrics</id>
 			<url>http://repo.mcstats.org/content/repositories/public</url>
 		</repository>
-		-->
 	</repositories>
 	
 	<dependencies>
@@ -75,14 +73,12 @@
 			<version>2.4</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
 			<artifactId>metrics</artifactId>
 			<version>R7</version>
 			<scope>provided</scope>
 		</dependency>
-		-->
 	</dependencies>
 	
 	<build>

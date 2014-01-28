@@ -98,9 +98,13 @@ public class MeasurementProtocolClient {
 			int responseCode = connection.getResponseCode();
 			OpenAnalytics.getInstance().log(Level.FINE, "HTTP Response Code " + responseCode);
 			
-			/******************************************************************/
-			/* The response is apparently a gif (so I've disabled reading it) */
-			/******************************************************************/
+			/************************************************************************/
+			/* The response is apparently a single pixel gif (so I am ignoring it). */
+			/* Google says that any respose code other then 2xx should result in    */
+			/* stopping sending of metrics and figuring out what is wrong. It would */
+			/* be good to check the response code and stop or pause if we get some  */
+			/* quantity of non-2xx response codes.                                  */
+			/************************************************************************/
 			
 			// Read response
 			//BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), MeasurementProtocol.ENDPOINT_ENCODING));

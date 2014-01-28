@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 /**
  * @author Paul Thompson
@@ -34,8 +35,8 @@ public class MetricsHandler {
 	private static final String METRICS_URL_PREFIX = "http://mcstats.org/plugin/";
 	protected      final String metrics_url;
 	
-	@SuppressWarnings("unused")
 	private        final JavaPlugin plugin;
+	private              Metrics    metrics;
 	
 	private MetricsHandler(JavaPlugin plugin) {
 		this.metrics_url = METRICS_URL_PREFIX + plugin.getName();
@@ -64,7 +65,7 @@ public class MetricsHandler {
 	}
 	
 	protected void run() throws IOException {
-		//Metrics metrics = new Metrics(plugin);
-		//metrics.start();
+		metrics = new Metrics(plugin);
+		metrics.start();
 	}
 }
