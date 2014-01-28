@@ -6,7 +6,7 @@
 	
 	<groupId>net.nyvaria</groupId>
 	<artifactId>OpenAnalytics</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.01</version>
 	
 	<name>OpenAnalytics</name>
 	<url>https://github.com/nyvaria/OpenAnalytics</url>
@@ -50,6 +50,10 @@
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
+		<repository>
+			<id>OnARandomBox</id>
+			<url>http://repo.onarandombox.com/content/groups/public</url>
+		</repository>
 		<!--
 		<repository>
 			<id>Plugin Metrics</id>
@@ -64,6 +68,12 @@
 			<artifactId>bukkit</artifactId>
 			<version>1.7.2-R0.3-SNAPSHOT</version>
 			<scope>provided</scope>						
+		</dependency>
+		<dependency>
+			<groupId>com.onarandombox.multiversecore</groupId>
+			<artifactId>Multiverse-Core</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
 		</dependency>
 		<!--
 		<dependency>

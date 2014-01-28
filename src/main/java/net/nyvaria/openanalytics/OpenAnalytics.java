@@ -23,7 +23,9 @@ package net.nyvaria.openanalytics;
 
 import java.util.logging.Level;
 
+import net.nyvaria.hook.MultiverseHook;
 import net.nyvaria.metrics.MetricsHandler;
+import net.nyvaria.openanalytics.client.ClientList;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,11 +34,18 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  */
 public class OpenAnalytics extends JavaPlugin {
-	protected static OpenAnalytics instance = null;
+	protected static OpenAnalytics instance    = null;
 	
-	// Open Analytics Listener and Metrics Handler
-	protected OpenAnalyticsListener listener = null;
-	protected MetricsHandler        metrics  = null;
+	// Open Analytics Listener and Tracker
+	protected OpenAnalyticsListener listener   = null;
+	protected OpenAnalyticsTracker  tracker    = null;
+	
+	// Hooks & Handlers
+	protected MultiverseHook        multiverse = null;
+	protected MetricsHandler        metrics    = null;
+	
+	// Client List
+	public ClientList clientList = null;
 	
 	public static OpenAnalytics getInstance() {
 		return instance;
@@ -51,12 +60,18 @@ public class OpenAnalytics extends JavaPlugin {
 		this.saveDefaultConfig();
 		this.getConfig().options().copyDefaults(true);
 		
-		// Create and register the listener
-		this.listener = OpenAnalyticsListener.getInstance();
-		this.getServer().getPluginManager().registerEvents(this.listener, this);
+		// Create an empty client map
+		this.clientList = new ClientList();
 		
-		// Initialise metrics
-		this.metrics = MetricsHandler.initialiseMetrics(this);
+		// Create and register the listener
+		this.listener = new OpenAnalyticsListener(this);
+		
+		// Create the tracker
+		this.tracker = new OpenAnalyticsTracker(this);
+		
+		// Initialise hooks & handlers
+		this.metrics = MetricsHandler.initialise(this);
+		this.multiverse = MultiverseHook.initialise(this);
 		
 		// Print a lovely log message
 		this.log("Enabling " + this.getNameAndVersion() + " successful");
@@ -66,6 +81,12 @@ public class OpenAnalytics extends JavaPlugin {
 	public void onDisable() {
 		// Destroy the metrics handler
 		this.metrics = null;
+		
+		// Destroy the tracker
+		this.tracker = null;
+		
+		// Destroy the client map
+		this.clientList = null;
 		
 		// And null the instance
 		OpenAnalytics.instance = null;

@@ -24,6 +24,7 @@ package net.nyvaria.openanalytics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -33,32 +34,39 @@ import org.bukkit.event.player.PlayerQuitEvent;
  *
  */
 public final class OpenAnalyticsListener implements Listener {
-	private static OpenAnalyticsListener instance = new OpenAnalyticsListener();
+	private static OpenAnalyticsListener instance;
+	private final  OpenAnalytics plugin;
 	
-	private OpenAnalyticsListener() {
-		// Exists only to defeat instantiation
+	public OpenAnalyticsListener(OpenAnalytics plugin) {
+		this.plugin = plugin;
+		this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
 	}
 	
 	public static OpenAnalyticsListener getInstance() {
-		if (instance == null) {
-			instance = new OpenAnalyticsListener();
-		}
 		return instance;
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		
+		plugin.clientList.put(event.getPlayer());
+		plugin.tracker.trackPlayerJoin(plugin.clientList.get(event.getPlayer()));
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		
+		plugin.tracker.trackPlayerQuit(plugin.clientList.get(event.getPlayer()));
+		plugin.clientList.remove(event.getPlayer());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerKick(PlayerKickEvent event) {
-		
+		plugin.tracker.trackPlayerKick(plugin.clientList.get(event.getPlayer()));
+		plugin.clientList.remove(event.getPlayer());
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+		plugin.tracker.trackPlayerChangedWorld(plugin.clientList.get(event.getPlayer()));
 	}
 	
 }
