@@ -77,7 +77,7 @@
 			<groupId>org.mcstats.bukkit</groupId>
 			<artifactId>metrics</artifactId>
 			<version>R7</version>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	
@@ -124,10 +124,61 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<links>
+						<link>http://jd.bukkit.org/apidocs</link>
+					</links>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<!-- put your configurations here -->
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<minimizeJar>true</minimizeJar>
+							<relocations>
+								<relocation>
+									<pattern>org.mcstats</pattern>
+									<shadedPattern>net.nyvaria.openanalytics.mcstats</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
 			</plugin>
+			-->
 		</plugins>
 	</build>
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<version>2.5.2</version>
+				<configuration>
+					<threshold>High</threshold>
+					<effort>Default</effort>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 	
 </project>
