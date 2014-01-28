@@ -38,14 +38,14 @@ public class TransactionHit extends Hit {
 	/* Transaction Parameters */
 	/**************************/
 	
-	@Parameter(format="text",    required=true,   name=MeasurementProtocol.TRANSACTION_ID)
+	@Parameter(format="text",     required=true,  name=MeasurementProtocol.TRANSACTION_ID)
 	public String transaction_id;
 	
 	@Parameter(format="text",     required=false, name=MeasurementProtocol.TRANSACTION_AFFILIATION)
 	public String transaction_affiliation;
 	
-	@Parameter(format="text",     required=false, name=MeasurementProtocol.TRANSACTION_REVENUE)
-	public String transaction_revenue;
+	@Parameter(format="currency", required=false, name=MeasurementProtocol.TRANSACTION_REVENUE)
+	public Float transaction_revenue;
 	
 	@Parameter(format="currency", required=false, name=MeasurementProtocol.TRANSACTION_SHIPPING)
 	public Float transaction_shipping;

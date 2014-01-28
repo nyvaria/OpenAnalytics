@@ -28,6 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Level;
 
 import net.nyvaria.googleanalytics.hit.Hit;
@@ -135,10 +136,24 @@ public class MeasurementProtocolClient {
 		}
 	}
 	
+	public void send(List<Hit> hitList) {
+		for (Hit hit : hitList) {
+			send(hit);
+		}
+	}
+	
 	public void sendAsynchronously(final Hit hit) {
 		OpenAnalytics.getInstance().getServer().getScheduler().runTaskAsynchronously(OpenAnalytics.getInstance(), new Runnable() {
 			public void run() {
 				send(hit);
+			}
+		});
+	}
+	
+	public void sendAsynchronously(final List<Hit> hitList) {
+		OpenAnalytics.getInstance().getServer().getScheduler().runTaskAsynchronously(OpenAnalytics.getInstance(), new Runnable() {
+			public void run() {
+				send(hitList);
 			}
 		});
 	}
