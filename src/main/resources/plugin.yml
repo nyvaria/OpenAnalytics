@@ -5,6 +5,7 @@ version: ${pom.version}
 author: captbunzo
 
 main: net.nyvaria.openanalytics.OpenAnalytics
+depend: [Multiverse-Core]
 
 commands:
 

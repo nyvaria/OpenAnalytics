@@ -23,6 +23,7 @@ package net.nyvaria.googleanalytics.hit;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
@@ -49,8 +50,8 @@ public class SocialInteractionHit extends Hit {
 	/* Constructor & Methods */
 	/*************************/
 	
-	public SocialInteractionHit(String client_id, String social_network, String social_action, String social_action_target) {
-		super(client_id, SocialInteractionHit.HIT_TYPE);
+	public SocialInteractionHit(Client client, String social_network, String social_action, String social_action_target) {
+		super(client, SocialInteractionHit.HIT_TYPE);
 		this.social_network       = social_network;
 		this.social_action        = social_action;
 		this.social_action_target = social_action_target;

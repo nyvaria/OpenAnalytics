@@ -23,6 +23,7 @@ package net.nyvaria.googleanalytics.hit;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
@@ -52,8 +53,8 @@ public class EventHit extends Hit {
 	/* Constructor & Methods */
 	/*************************/
 	
-	public EventHit(String client_id, String event_category, String event_action) {
-		super(client_id, EventHit.HIT_TYPE);
+	public EventHit(Client client, String event_category, String event_action) {
+		super(client, EventHit.HIT_TYPE);
 		this.event_category = event_category;
 		this.event_action   = event_action;
 	}

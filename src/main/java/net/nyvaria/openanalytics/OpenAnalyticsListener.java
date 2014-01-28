@@ -24,6 +24,7 @@ package net.nyvaria.openanalytics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -61,6 +62,11 @@ public final class OpenAnalyticsListener implements Listener {
 	public void onPlayerKick(PlayerKickEvent event) {
 		plugin.tracker.trackPlayerKick(plugin.clientList.get(event.getPlayer()));
 		plugin.clientList.remove(event.getPlayer());
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+		plugin.tracker.trackPlayerChangedWorld(plugin.clientList.get(event.getPlayer()));
 	}
 	
 }

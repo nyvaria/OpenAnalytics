@@ -29,20 +29,31 @@ import java.util.List;
 import java.util.logging.Level;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
+import net.nyvaria.googleanalytics.MeasurementProtocolClient;
 import net.nyvaria.googleanalytics.Parameter;
 import net.nyvaria.openanalytics.OpenAnalytics;
+import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
  *
  */
 public abstract class Hit {
+	private Client client;
+	
+	public Client getClient() {
+		return client;
+	}
+	
 	/***********************/
 	/* Required Parameters */
 	/***********************/
 	
 	@Parameter(format="text", required=true, name=MeasurementProtocol.PROTOCOL_VERSION)
 	public String protocol_version;
+	
+	@Parameter(format="text", required=true, name=MeasurementProtocol.TRACKING_ID)
+	public String tracking_id;
 	
 	@Parameter(format="text", required=true, name=MeasurementProtocol.CLIENT_ID)
 	public String client_id;
@@ -177,21 +188,21 @@ public abstract class Hit {
 	/* Constructor & Methods */
 	/*************************/
 	
-	public Hit(String client_id, String hit_type) {
+	public Hit(Client client, String hit_type) {
+		this.client           = client;
 		this.protocol_version = MeasurementProtocol.ENDPOINT_PROTOCOL_VERSION;
-		this.hit_type  = hit_type;
-		this.client_id = client_id;
+		this.tracking_id      = MeasurementProtocolClient.getInstance().tracking_id;
+		this.hit_type         = hit_type;
+		this.client_id        = client.getClientID();
 	}
 	
 	public List<String> getParameterList() {
-		OpenAnalytics.getInstance().log("DEBUG -- Hit.getParameterList");
 		List<String> list = new ArrayList<String>();
 		
 		for (Field field : this.getClass().getFields()) {
 			Parameter parameter = (Parameter) field.getAnnotation(Parameter.class);
 			
 			if (parameter != null) {
-				OpenAnalytics.getInstance().log("DEBUG -- Hit.getParameterList -- " + field.getName() + " [not null]");
 				Object value = null;
 				
 				try {
@@ -204,8 +215,6 @@ public abstract class Hit {
 				if (result != null) {
 					list.add(result);
 				}
-			} else {
-				OpenAnalytics.getInstance().log("DEBUG -- Hit.getParameterList -- " + field.getName() + " [null / annotations:" + field.getAnnotations().length + "]");
 			}
 		}
 		

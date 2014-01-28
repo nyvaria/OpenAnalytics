@@ -23,6 +23,7 @@ package net.nyvaria.googleanalytics.hit;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
@@ -46,13 +47,13 @@ public class ExceptionHit extends Hit {
 	/* Constructor & Methods */
 	/*************************/
 	
-	public ExceptionHit(String client_id, String exception_description, boolean exception_is_fatal) {
-		super(client_id, ExceptionHit.HIT_TYPE);
+	public ExceptionHit(Client client, String exception_description, boolean exception_is_fatal) {
+		super(client, ExceptionHit.HIT_TYPE);
 		this.exception_description = exception_description;
 		this.exception_is_fatal    = exception_is_fatal;
 	}
 	
-	public ExceptionHit(String client_id, String exception_description) {
-		this(client_id, exception_description, false);
+	public ExceptionHit(Client client, String exception_description) {
+		this(client, exception_description, false);
 	}
 }

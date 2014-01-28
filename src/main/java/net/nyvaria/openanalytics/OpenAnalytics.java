@@ -23,6 +23,7 @@ package net.nyvaria.openanalytics;
 
 import java.util.logging.Level;
 
+import net.nyvaria.hook.MultiverseHook;
 import net.nyvaria.metrics.MetricsHandler;
 import net.nyvaria.openanalytics.client.ClientList;
 
@@ -33,17 +34,18 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  */
 public class OpenAnalytics extends JavaPlugin {
-	protected static OpenAnalytics instance = null;
+	protected static OpenAnalytics instance    = null;
 	
 	// Open Analytics Listener and Tracker
-	protected OpenAnalyticsListener listener = null;
-	protected OpenAnalyticsTracker  tracker  = null;
+	protected OpenAnalyticsListener listener   = null;
+	protected OpenAnalyticsTracker  tracker    = null;
 	
-	// Metrics Handler
-	protected MetricsHandler        metrics  = null;
+	// Hooks & Handlers
+	protected MultiverseHook        multiverse = null;
+	protected MetricsHandler        metrics    = null;
 	
 	// Client List
-	public    ClientList            clientList = null;
+	public ClientList clientList = null;
 	
 	public static OpenAnalytics getInstance() {
 		return instance;
@@ -67,8 +69,9 @@ public class OpenAnalytics extends JavaPlugin {
 		// Create the tracker
 		this.tracker = new OpenAnalyticsTracker(this);
 		
-		// Initialise metrics
-		this.metrics = MetricsHandler.initialiseMetrics(this);
+		// Initialise hooks & handlers
+		this.metrics = MetricsHandler.initialise(this);
+		this.multiverse = MultiverseHook.initialise(this);
 		
 		// Print a lovely log message
 		this.log("Enabling " + this.getNameAndVersion() + " successful");

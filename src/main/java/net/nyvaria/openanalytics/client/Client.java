@@ -24,7 +24,11 @@ package net.nyvaria.openanalytics.client;
 import java.util.UUID;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
+import net.nyvaria.googleanalytics.MeasurementProtocolClient;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.googleanalytics.hit.EventHit;
+import net.nyvaria.googleanalytics.hit.PageViewHit;
+import net.nyvaria.hook.MultiverseHook;
 
 import org.bukkit.entity.Player;
 
@@ -56,5 +60,46 @@ public class Client {
 	
 	public String getClientID() {
 		return client_id;
+	}
+	
+	public String getIPAddress() {
+		return this.player.getAddress().getAddress().toString().replace("/", "");
+	}
+	
+	/**********************/
+	/* Event Hit Creation */
+	/**********************/
+	
+	public EventHit createPlayerJoinHit() {
+		EventHit eventHit = new EventHit(this, "Player Connection", "Join");
+		eventHit.event_label = "Player Join";
+		eventHit.session_control = "start";
+		return eventHit;
+	}
+	
+	public EventHit createPlayerQuitHit() {
+		EventHit eventHit = new EventHit(this, "Player Connection", "Quit");
+		eventHit.event_label = "Player Quit";
+		eventHit.session_control = "end";
+		return eventHit;
+	}
+	
+	public EventHit createPlayerKickHit() {
+		EventHit eventHit = new EventHit(this, "Player Connection", "Kick");
+		eventHit.event_label = "Player Kick";
+		eventHit.session_control = "end";
+		return eventHit;
+	}
+	
+	/**************************/
+	/* Page View Hit Creation */
+	/**************************/
+	
+	public PageViewHit createWorldHit() {
+		PageViewHit worldHit = new PageViewHit(this);
+		worldHit.document_path  = "/world/" + this.getPlayer().getLocation().getWorld().getName();
+		worldHit.document_title = "World - " + MultiverseHook.getWorldAlias(this.getPlayer().getLocation().getWorld().getName());
+		worldHit.document_host_name = MeasurementProtocolClient.getInstance().document_host_name;
+		return worldHit;
 	}
 }

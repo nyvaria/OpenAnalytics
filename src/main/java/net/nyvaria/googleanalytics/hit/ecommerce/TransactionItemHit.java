@@ -24,6 +24,7 @@ package net.nyvaria.googleanalytics.hit.ecommerce;
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
@@ -66,8 +67,8 @@ public class TransactionItemHit extends Hit {
 	/* Constructor & Methods */
 	/*************************/
 	
-	public TransactionItemHit(String client_id, String transaction_id, String item_name) {
-		super(client_id, TransactionItemHit.HIT_TYPE);
+	public TransactionItemHit(Client client, String transaction_id, String item_name) {
+		super(client, TransactionItemHit.HIT_TYPE);
 		this.transaction_id = transaction_id;
 		this.item_name      = item_name;
 	}

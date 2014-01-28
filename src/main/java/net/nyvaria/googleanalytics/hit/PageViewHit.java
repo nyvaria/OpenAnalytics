@@ -23,6 +23,7 @@ package net.nyvaria.googleanalytics.hit;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
@@ -32,7 +33,7 @@ public class PageViewHit extends Hit {
 	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
 	private static final String HIT_TYPE = "pageview";
 	
-	public PageViewHit(String client_id) {
-		super(client_id, PageViewHit.HIT_TYPE);
+	public PageViewHit(Client client) {
+		super(client, PageViewHit.HIT_TYPE);
 	}
 }

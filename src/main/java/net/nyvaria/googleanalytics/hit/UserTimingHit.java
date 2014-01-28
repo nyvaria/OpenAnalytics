@@ -23,6 +23,7 @@ package net.nyvaria.googleanalytics.hit;
 
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.Parameter;
+import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
@@ -70,7 +71,7 @@ public class UserTimingHit extends Hit {
 	/* Constructor & Methods */
 	/*************************/
 	
-	public UserTimingHit(String client_id) {
-		super(client_id, UserTimingHit.HIT_TYPE);
+	public UserTimingHit(Client client) {
+		super(client, UserTimingHit.HIT_TYPE);
 	}
 }

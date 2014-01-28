@@ -21,9 +21,7 @@
  */
 package net.nyvaria.googleanalytics;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -44,18 +42,22 @@ public class MeasurementProtocolClient {
 	private static MeasurementProtocolClient instance;
 	private URL endpoint_url;
 	
+	@Parameter(format="text", required=true, name=MeasurementProtocol.DOCUMENT_HOST_NAME)
+	public String document_host_name;
+	
 	@Parameter(format="text", required=true, name=MeasurementProtocol.TRACKING_ID)
 	public String tracking_id;
-	
-	private MeasurementProtocolClient(String tracking_id) throws MalformedURLException {
+
+	private MeasurementProtocolClient(String host_name, String tracking_id) throws MalformedURLException {
+		this.document_host_name = host_name;
 		this.tracking_id = tracking_id;
 		endpoint_url = new URL(MeasurementProtocol.ENDPOINT);
 	}
 	
-	public static MeasurementProtocolClient getInstance(String tracking_id) {
+	public static MeasurementProtocolClient getInstance(String host_name, String tracking_id) {
 		if (instance == null) {
 			try {
-				instance = new MeasurementProtocolClient(tracking_id);
+				instance = new MeasurementProtocolClient(host_name, tracking_id);
 			} catch (MalformedURLException e) {
 				OpenAnalytics.getInstance().log(Level.WARNING, "MalformedURLException while initializing Measurement Protocol Client (" + MeasurementProtocol.ENDPOINT + ")");
 				e.printStackTrace();
@@ -71,14 +73,17 @@ public class MeasurementProtocolClient {
 	public void send(Hit hit) {
 		HttpURLConnection connection = null;
 		String payload_data = StringUtils.join(hit.getParameterList(), "&");
+		String ip_address   = hit.getClient().getIPAddress();
 		
 		// Log the query string for now
-		OpenAnalytics.getInstance().log("Sending data to Google Analytics: " + payload_data);
+		OpenAnalytics.getInstance().log(Level.FINE, "Sending data to Google Analytics: " + payload_data);
+		OpenAnalytics.getInstance().log(Level.FINE, "Sending data for IP address: " + ip_address);
 		
 		try {
 			// Create and setup the connection
 			connection = (HttpURLConnection) endpoint_url.openConnection();
 			connection.setRequestMethod(MeasurementProtocol.ENDPOINT_REQUEST_METHOD);
+			connection.setRequestProperty("X-Forwarded-For", ip_address);
 			connection.setUseCaches(false);
 			connection.setDoInput(true);
 			connection.setDoOutput(true);
@@ -89,18 +94,24 @@ public class MeasurementProtocolClient {
 			requestWriter.flush();
 			requestWriter.close();
 			
+			// Get the response code
+			int responseCode = connection.getResponseCode();
+			OpenAnalytics.getInstance().log(Level.FINE, "HTTP Response Code " + responseCode);
+			
+			/******************************************************************/
+			/* The response is apparently a gif (so I've disabled reading it) */
+			/******************************************************************/
+			
 			// Read response
-			BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), MeasurementProtocol.ENDPOINT_ENCODING));
-			
-			String responseLine;
-			StringBuilder response = new StringBuilder();
-			while ((responseLine = responseReader.readLine()) != null) {
-				response.append(responseLine);
-				response.append('\n');
-			}
-			responseReader.close();
-			
-			// Consider doing something with the response
+			//BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), MeasurementProtocol.ENDPOINT_ENCODING));
+			//
+			//String responseLine;
+			//StringBuilder response = new StringBuilder();
+			//while ((responseLine = responseReader.readLine()) != null) {
+			//	response.append(responseLine);
+			//	response.append('\n');
+			//}
+			//responseReader.close();
 			
 		} catch (UnsupportedEncodingException uee) {
 			OpenAnalytics.getInstance().log(Level.WARNING, "UnsupportedEncodingException while sending data to Google Analytics");
@@ -118,5 +129,13 @@ public class MeasurementProtocolClient {
 		if (connection != null) {
 			connection.disconnect();
 		}
+	}
+	
+	public void sendAsynchronously(final Hit hit) {
+		OpenAnalytics.getInstance().getServer().getScheduler().runTaskAsynchronously(OpenAnalytics.getInstance(), new Runnable() {
+			public void run() {
+				send(hit);
+			}
+		});
 	}
 }

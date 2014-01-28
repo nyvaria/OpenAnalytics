@@ -26,7 +26,7 @@ package net.nyvaria.googleanalytics;
  *
  */
 public abstract class MeasurementProtocol {
-	public static final String ENDPOINT = "http://www.google-analytics.com";
+	public static final String ENDPOINT = "http://www.google-analytics.com/collect";
 	public static final String ENDPOINT_PROTOCOL_VERSION = "1";
 	public static final String ENDPOINT_ENCODING = "UTF-8";
 	public static final String ENDPOINT_REQUEST_METHOD = "POST";

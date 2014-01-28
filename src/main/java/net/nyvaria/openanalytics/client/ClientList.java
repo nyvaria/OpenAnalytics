@@ -22,6 +22,7 @@
 package net.nyvaria.openanalytics.client;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.bukkit.entity.Player;
 
@@ -29,7 +30,7 @@ import org.bukkit.entity.Player;
  * @author Paul Thompson
  *
  */
-public class ClientList {
+public class ClientList implements Iterable<Client> {
 	private HashMap<Player, Client> list;
 
 	public ClientList() {
@@ -58,5 +59,9 @@ public class ClientList {
 	
 	public void clear() {
 		this.list.clear();
+	}
+
+	public Iterator<Client> iterator() {
+		return list.values().iterator();
 	}
 }

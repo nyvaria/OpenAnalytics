@@ -42,7 +42,7 @@ public class MetricsHandler {
 		this.plugin      = plugin;
 	}
 	
-	public static MetricsHandler initialiseMetrics(JavaPlugin plugin) {
+	public static MetricsHandler initialise(JavaPlugin plugin) {
 		MetricsHandler metricsHandler = null;
 		
 		if (!plugin.getConfig().getBoolean("use-metrics")) {
