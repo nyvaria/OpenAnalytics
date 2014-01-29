@@ -31,9 +31,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 
+import net.nyvaria.component.util.StringUtils;
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.openanalytics.OpenAnalytics;
-import net.nyvaria.utils.StringUtils;
 
 /**
  * @author Paul Thompson

@@ -6,7 +6,7 @@
 	
 	<groupId>net.nyvaria</groupId>
 	<artifactId>OpenAnalytics</artifactId>
-	<version>0.1.03</version>
+	<version>0.1.04</version>
 	
 	<name>OpenAnalytics</name>
 	<url>https://github.com/nyvaria/OpenAnalytics</url>
@@ -51,16 +51,8 @@
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
 		<repository>
-			<id>OnARandomBox</id>
-			<url>http://repo.onarandombox.com/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>Plugin Metrics</id>
-			<url>http://repo.mcstats.org/content/repositories/public</url>
-		</repository>
-		<repository>
 			<id>repo.pjt.me</id>
-			<url>http://repo.pjt.me/content/groups/public</url>
+			<url>http://repo.pjt.me/content/groups/public/</url>
 		</repository>
 	</repositories>
 	
@@ -74,20 +66,8 @@
 		<dependency>
 			<groupId>net.nyvaria</groupId>
 			<artifactId>NyvariaComponents</artifactId>
-			<version>0.0.02</version>
+			<version>0.0.03</version>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mcstats.bukkit</groupId>
-			<artifactId>metrics</artifactId>
-			<version>R7</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.onarandombox.multiversecore</groupId>
-			<artifactId>Multiverse-Core</artifactId>
-			<version>2.4</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.wargamer2010</groupId>
@@ -167,10 +147,6 @@
 								<relocation>
 									<pattern>net.nyvaria.component</pattern>
 									<shadedPattern>net.nyvaria.openanalytics.component</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>org.mcstats</pattern>
-									<shadedPattern>net.nyvaria.openanalytics.mcstats</shadedPattern>
 								</relocation>
 							</relocations>
 						</configuration>

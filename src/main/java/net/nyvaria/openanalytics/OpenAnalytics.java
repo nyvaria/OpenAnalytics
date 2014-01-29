@@ -23,8 +23,9 @@ package net.nyvaria.openanalytics;
 
 import java.util.logging.Level;
 
+import net.nyvaria.component.hook.MetricsHook;
 import net.nyvaria.component.hook.MultiverseHook;
-import net.nyvaria.metrics.MetricsHandler;
+import net.nyvaria.component.hook.SignShopHook;
 import net.nyvaria.openanalytics.client.ClientList;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,15 +35,14 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  */
 public class OpenAnalytics extends JavaPlugin {
-	protected static OpenAnalytics instance    = null;
+	protected static OpenAnalytics instance  = null;
 	
 	// Open Analytics Listener and Tracker
-	protected OpenAnalyticsListener listener   = null;
-	protected OpenAnalyticsTracker  tracker    = null;
+	protected OpenAnalyticsListener listener = null;
+	protected OpenAnalyticsTracker  tracker  = null;
 	
-	// Hooks & Handlers
-	protected boolean multiverse_is_hooked = false;
-	protected MetricsHandler metrics = null;
+	// SignShop Listener
+	protected SignShopListener signshop_listener = null;
 	
 	// Client List
 	public ClientList clientList = null;
@@ -69,9 +69,14 @@ public class OpenAnalytics extends JavaPlugin {
 		// Create the tracker
 		this.tracker = new OpenAnalyticsTracker(this);
 		
-		// Initialise hooks & handlers
-		this.metrics = MetricsHandler.initialise(this);
-		this.multiverse_is_hooked = MultiverseHook.initialise(this);
+		// Initialise hooks
+		MetricsHook.initialize(this);
+		MultiverseHook.initialize(this);
+		SignShopHook.initialize(this);
+		
+		if (SignShopHook.is_hooked()) {
+			this.signshop_listener = new SignShopListener(this);
+		}
 		
 		// Print a lovely log message
 		this.log("Enabling " + this.getNameAndVersion() + " successful");
@@ -79,9 +84,6 @@ public class OpenAnalytics extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		// Destroy the metrics handler
-		this.metrics = null;
-		
 		// Destroy the tracker
 		this.tracker = null;
 		

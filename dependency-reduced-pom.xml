@@ -119,8 +119,8 @@
       <url>http://repo.mcstats.org/content/repositories/public</url>
     </repository>
     <repository>
-      <id>repo.pjt.me</id>
-      <url>http://repo.pjt.me/content/groups/public</url>
+      <id>captbunzos-repo</id>
+      <url>http://repo.pjt.me/content/groups/public/</url>
     </repository>
   </repositories>
   <dependencies>

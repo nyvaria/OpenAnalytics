@@ -5,7 +5,7 @@ version: ${pom.version}
 author: captbunzo
 
 main: net.nyvaria.openanalytics.OpenAnalytics
-softdepend: [Multiverse-Core]
+softdepend: [Multiverse-Core, SignShop]
 
 commands:
 
