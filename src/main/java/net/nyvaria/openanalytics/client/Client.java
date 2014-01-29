@@ -23,12 +23,12 @@ package net.nyvaria.openanalytics.client;
 
 import java.util.UUID;
 
+import net.nyvaria.component.wrapper.NyvariaWorld;
 import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.MeasurementProtocolClient;
 import net.nyvaria.googleanalytics.Parameter;
 import net.nyvaria.googleanalytics.hit.EventHit;
 import net.nyvaria.googleanalytics.hit.PageViewHit;
-import net.nyvaria.hook.MultiverseHook;
 
 import org.bukkit.entity.Player;
 
@@ -119,7 +119,7 @@ public class Client {
 				+ this.player.getLocation().getWorld().getName();
 	}
 	
-	private String getWorldTitle() {
-		return "World - " + MultiverseHook.getWorldAlias(this.player);
+ 	private String getWorldTitle() {
+		return "World - " + NyvariaWorld.getWorldAlias(this.player.getLocation());
 	}
 }

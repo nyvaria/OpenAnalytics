@@ -68,8 +68,14 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.7.2-R0.3-SNAPSHOT</version>
+			<version>1.7.2-R0.2</version>
 			<scope>provided</scope>						
+		</dependency>
+		<dependency>
+			<groupId>net.nyvaria</groupId>
+			<artifactId>NyvariaComponents</artifactId>
+			<version>0.0.02</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mcstats.bukkit</groupId>
@@ -158,6 +164,10 @@
 						<configuration>
 							<minimizeJar>true</minimizeJar>
 							<relocations>
+								<relocation>
+									<pattern>net.nyvaria.component</pattern>
+									<shadedPattern>net.nyvaria.openanalytics.component</shadedPattern>
+								</relocation>
 								<relocation>
 									<pattern>org.mcstats</pattern>
 									<shadedPattern>net.nyvaria.openanalytics.mcstats</shadedPattern>
