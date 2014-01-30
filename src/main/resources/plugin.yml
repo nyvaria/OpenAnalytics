@@ -8,9 +8,13 @@ main: net.nyvaria.openanalytics.OpenAnalytics
 softdepend: [Multiverse-Core, SignShop]
 
 commands:
+  analytics:
+    description: Interact with the OpenAnalytics plugin
+    usage: /analytics [command] - Interact with the OpenAnalytics plugin
 
 permissions:
-  # Base Permissions
+  openanalytics.admin:
+    description: Gives access to the /analytics admin commands
   
-  # Group Permissions
-
+  openanalytics.optout:
+    description: Gives access to the /analytics optout command

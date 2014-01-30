@@ -59,29 +59,32 @@ public class SignShopListener implements Listener {
 		List<Hit> hitList = new ArrayList<Hit>();
 		
 		// Find the player
-		Client client = OpenAnalytics.getInstance().clientList.get(event.getPlayer().getPlayer());
+		Client client = OpenAnalytics.getInstance().getClientList().get(event.getPlayer().getPlayer());
 		
-		// Create transaction hits
-		TransactionHit transactionHit = new TransactionHit(client, UUID.randomUUID().toString());
-		transactionHit.transaction_affiliation = event.getOwner().getName(); // Should we do this?
-		transactionHit.transaction_revenue = event.getPrice();
-		transactionHit.currency_code = "USD";
-		
-		// Add the transaction hit to our hit list
-		hitList.add(transactionHit);
-		
-		// Create transaction item hits
-		for (ItemStack stack : event.getItems()) {
-			// Create the transaction item hit
-			TransactionItemHit itemHit = new TransactionItemHit(client, transactionHit.transaction_id, stack.getType().name());
-			itemHit.item_code = String.format("%d", stack.getType().hashCode());
-			itemHit.item_quantity = stack.getAmount();
+		// Proceed if the player is not opted out
+		if (!client.isOptedOut()) {
+			// Create transaction hits
+			TransactionHit transactionHit = new TransactionHit(client, UUID.randomUUID().toString());
+			transactionHit.transaction_affiliation = event.getOwner().getName(); // Should we do this?
+			transactionHit.transaction_revenue = event.getPrice();
+			transactionHit.currency_code = "USD";
 			
-    		// Add the transaction item hit to our hit list
-    		hitList.add(itemHit);
+			// Add the transaction hit to our hit list
+			hitList.add(transactionHit);
+			
+			// Create transaction item hits
+			for (ItemStack stack : event.getItems()) {
+				// Create the transaction item hit
+				TransactionItemHit itemHit = new TransactionItemHit(client, transactionHit.transaction_id, stack.getType().name());
+				itemHit.item_code = String.format("%d", stack.getType().hashCode());
+				itemHit.item_quantity = stack.getAmount();
+				
+	    		// Add the transaction item hit to our hit list
+	    		hitList.add(itemHit);
+			}
+			
+			// Sent the hit list
+			MeasurementProtocolClient.getInstance().sendAsynchronously(hitList);
 		}
-		
-		// Sent the hit list
-		MeasurementProtocolClient.getInstance().sendAsynchronously(hitList);
 	}
 }

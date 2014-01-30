@@ -48,25 +48,25 @@ public final class OpenAnalyticsListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		plugin.clientList.put(event.getPlayer());
-		plugin.tracker.trackPlayerJoin(plugin.clientList.get(event.getPlayer()));
+		plugin.getClientList().put(event.getPlayer());
+		plugin.getTracker().trackPlayerJoin(plugin.getClientList().get(event.getPlayer()));
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		plugin.tracker.trackPlayerQuit(plugin.clientList.get(event.getPlayer()));
-		plugin.clientList.remove(event.getPlayer());
+		plugin.getTracker().trackPlayerQuit(plugin.getClientList().get(event.getPlayer()));
+		plugin.getClientList().remove(event.getPlayer());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerKick(PlayerKickEvent event) {
-		plugin.tracker.trackPlayerKick(plugin.clientList.get(event.getPlayer()));
-		plugin.clientList.remove(event.getPlayer());
+		plugin.getTracker().trackPlayerKick(plugin.getClientList().get(event.getPlayer()));
+		plugin.getClientList().remove(event.getPlayer());
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-		plugin.tracker.trackPlayerChangedWorld(plugin.clientList.get(event.getPlayer()));
+		plugin.getTracker().trackPlayerChangedWorld(plugin.getClientList().get(event.getPlayer()));
 	}
 	
 }

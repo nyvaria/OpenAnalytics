@@ -227,14 +227,22 @@ public abstract class Hit {
 		if (parameter.required() || value != null) {
 			String text = null;
 			
-			if (parameter.format().equals("text")) {
-				text = (String) value;
-			} else if (parameter.format().equals("boolean")) {
-				text = (((Boolean) value).booleanValue() ? "1" : "0");
-			} else if (parameter.format().equals("integer")) {
-				text = String.format("%d", ((Integer) value).intValue());
-			} else if (parameter.format().equals("currency")) {
-				text = String.format("%.2f", ((Float) value).floatValue());
+			switch (parameter.format()) {
+				case "text":
+					text = (String) value;
+					break;
+				
+				case "boolean":
+					text = (((Boolean) value).booleanValue() ? "1" : "0");
+					break;
+				
+				case "integer":
+					text = String.format("%d", ((Integer) value).intValue());
+					break;
+				
+				case "currency":
+					text = String.format("%.2f", ((Float) value).floatValue());
+					break;
 			}
 			
 			try {

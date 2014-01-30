@@ -21,65 +21,84 @@
  */
 package net.nyvaria.openanalytics;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 
+import net.nyvaria.component.exception.CannotEnablePluginException;
 import net.nyvaria.component.hook.MetricsHook;
 import net.nyvaria.component.hook.MultiverseHook;
 import net.nyvaria.component.hook.SignShopHook;
+import net.nyvaria.component.wrapper.NyvariaPlugin;
 import net.nyvaria.openanalytics.client.ClientList;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * @author Paul Thompson
  *
  */
-public class OpenAnalytics extends JavaPlugin {
-	protected static OpenAnalytics instance  = null;
+public class OpenAnalytics extends NyvariaPlugin {
+	public  static final String  PERMISSION_BASE = "openanalytics";
+	private static OpenAnalytics instance = null;
 	
-	// Open Analytics Listener and Tracker
-	protected OpenAnalyticsListener listener = null;
-	protected OpenAnalyticsTracker  tracker  = null;
+	// Listener and Tracker and Lists (oh my)
+	private OpenAnalyticsListener listener     = null;
+	private OpenAnalyticsTracker  tracker      = null;
+	private SignShopListener      shopListener = null;
+	private ClientList            clientList   = null;
 	
-	// SignShop Listener
-	protected SignShopListener signshop_listener = null;
-	
-	// Client List
-	public ClientList clientList = null;
+	// Client config file variables 
+	private final File        playerConfigFile = new File(this.getDataFolder(), "players.yml");
+	private FileConfiguration playerConfig     = null;
 	
 	public static OpenAnalytics getInstance() {
 		return instance;
 	}
 	
+	/*********************************************/
+	/* Override the onEnable & onDisable methods */
+	/*********************************************/
+	
 	@Override
 	public void onEnable() {
-		// First set the instance
-		OpenAnalytics.instance = this;
+		try {
+			// First set the instance
+			OpenAnalytics.instance = this;
+			
+			// Initialise or update the configuration
+			this.saveDefaultConfig();
+			this.getConfig().options().copyDefaults(true);
+			
+			// Load the client config
+			this.playerConfig = loadPlayerConfig();
+			
+			// Create an empty client list and tracker
+			this.clientList = new ClientList();
+			this.tracker = new OpenAnalyticsTracker(this);
+			
+			// Then create and register the listener (order is important) 
+			this.listener = new OpenAnalyticsListener(this);
+			
+			// Initialise hooks
+			MetricsHook.initialize(this);
+			MultiverseHook.initialize(this);
+			SignShopHook.initialize(this);
+			
+			if (SignShopHook.is_hooked()) {
+				this.shopListener = new SignShopListener(this);
+			}
 		
-		// Initialise or update the configuration
-		this.saveDefaultConfig();
-		this.getConfig().options().copyDefaults(true);
-		
-		// Create an empty client map
-		this.clientList = new ClientList();
-		
-		// Create and register the listener
-		this.listener = new OpenAnalyticsListener(this);
-		
-		// Create the tracker
-		this.tracker = new OpenAnalyticsTracker(this);
-		
-		// Initialise hooks
-		MetricsHook.initialize(this);
-		MultiverseHook.initialize(this);
-		SignShopHook.initialize(this);
-		
-		if (SignShopHook.is_hooked()) {
-			this.signshop_listener = new SignShopListener(this);
+		} catch (CannotEnablePluginException e) {
+			this.log("Enabling %s failed - %s", this.getNameAndVersion(), e.getMessage());
+			e.printStackTrace();
+			this.setEnabled(false);
+			
+		} finally {
+			this.log("Enabling %s successful", this.getNameAndVersion());
 		}
-		
-		// Print a lovely log message
-		this.log("Enabling " + this.getNameAndVersion() + " successful");
 	}
 	
 	@Override
@@ -94,18 +113,70 @@ public class OpenAnalytics extends JavaPlugin {
 		OpenAnalytics.instance = null;
 		
 		// Print a lovely log message
-		this.log("Disabling " + this.getNameAndVersion() + " successful");
+		this.log("Disabling %s succesful", this.getNameAndVersion());
 	}
 	
-	public void log(String msg) {
-		this.log(Level.INFO, msg);
+	private FileConfiguration loadPlayerConfig() throws CannotEnablePluginException {
+		FileConfiguration config = new YamlConfiguration();
+		
+		if (playerConfigFile.isFile()) {
+			// Attempt to load the player configuration file
+			try {
+				this.log("Loading player configuration file - %s", playerConfigFile.getName());
+				config.load(playerConfigFile);
+				
+			} catch (IOException e) {
+				throw new CannotEnablePluginException("Cannot read player configuration file", e);
+				
+			} catch (InvalidConfigurationException e) {
+				throw new CannotEnablePluginException("Invalid player configuraiton file", e);
+			}
+			
+		} else {
+			// Attempt to create a new player configuration file
+			try {
+				this.log("Player configuration file not found");
+				this.log("Creating new player configuration file - %s", playerConfigFile.getName());
+				config.save(playerConfigFile);
+				
+			} catch (IOException e) {
+				throw new CannotEnablePluginException("Cannot create new player configuration file", e);
+			}
+		}
+		
+		return config;
 	}
 	
-	public void log(Level level, String msg) {
-		this.getLogger().log(level, msg);
+	public void savePlayerConfig() {
+		try {
+			this.playerConfig.save(this.playerConfigFile);
+		} catch (IOException e) {
+			this.log(Level.WARNING, "Cannot save player configuration file");
+			e.printStackTrace();
+		}
+	}
+
+	/***********/
+	/* Getters */
+	/***********/
+	
+	public OpenAnalyticsListener getListener() {
+		return listener;
 	}
 	
-	private String getNameAndVersion() {
-		return this.getName() + " v" + this.getDescription().getVersion();
+	public OpenAnalyticsTracker getTracker() {
+		return tracker;
+	}
+	
+	public SignShopListener getShopListener() {
+		return shopListener;
+	}
+	
+	public ClientList getClientList() {
+		return clientList;
+	}
+	
+	public FileConfiguration getPlayerConfig() {
+		return playerConfig;
 	}
 }

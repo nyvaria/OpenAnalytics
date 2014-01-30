@@ -21,15 +21,13 @@
  */
 package net.nyvaria.openanalytics.client;
 
-import java.util.UUID;
-
 import net.nyvaria.component.wrapper.NyvariaWorld;
-import net.nyvaria.googleanalytics.MeasurementProtocol;
 import net.nyvaria.googleanalytics.MeasurementProtocolClient;
-import net.nyvaria.googleanalytics.Parameter;
 import net.nyvaria.googleanalytics.hit.EventHit;
 import net.nyvaria.googleanalytics.hit.PageViewHit;
+import net.nyvaria.openanalytics.OpenAnalytics;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -37,21 +35,12 @@ import org.bukkit.entity.Player;
  *
  */
 public class Client {
-	private final Player player;
-	
-	// According to the Google Measurement Protocol Policy, the UUID used for the Client ID has to be something
-	// that Google cannot use to identify the person involved. For expediency, this initial hack will use the
-	// Minecraft user's UUID. However, that will need to change. What we will do is generate a random UUID per
-	// user and save that in a data file of some sorts.
-	private UUID unique_id;
-	
-	@Parameter(format="text", required=true, name=MeasurementProtocol.CLIENT_ID)
-	private String client_id;
+	private final Player       player;
+	private final ClientConfig config;
 	
 	public Client(Player player) {
-		this.player    = player;
-		this.unique_id = player.getUniqueId();
-		this.client_id = unique_id.toString();
+		this.player = player;
+		this.config = new ClientConfig(player);
 	}
 	
 	public Player getPlayer() {
@@ -59,11 +48,35 @@ public class Client {
 	}
 	
 	public String getClientID() {
-		return client_id;
+		return config.getClientID();
 	}
 	
 	public String getIPAddress() {
 		return this.player.getAddress().getAddress().toString().replace("/", "");
+	}
+	
+	public boolean isOptedOut() {
+		return config.isOptedOut();
+	}
+	
+	public void setOptOut(boolean optout) {
+		config.setOptOut(optout);
+	}
+	
+	public static void setOptOut(OfflinePlayer offlinePlayer, boolean optout) {
+		
+	}
+	
+	public static void setOptOut(Player player, boolean optout) {
+		// See if we need to set an online player as opted out
+		Client client = OpenAnalytics.getInstance().getClientList().get(player);
+		if (client != null) {
+			client.setOptOut(optout);
+		}
+		
+		// And create a throwaway client config and set the value
+		ClientConfig config = new ClientConfig(player);
+		config.setOptOut(optout);
 	}
 	
 	/**********************/

@@ -80,34 +80,36 @@ public class OpenAnalyticsTracker {
 	}
 	
 	public void trackPlayerJoin(Client client) {
-		if (is_tracking) {
+		if (is_tracking && !client.isOptedOut()) {
 			mpClient.sendAsynchronously(client.createPlayerJoinHit());
 			mpClient.sendAsynchronously(client.createWorldHit());
 		}
 	}
 	
 	public void trackPlayerQuit(Client client) {
-		if (is_tracking) {
+		if (is_tracking && !client.isOptedOut()) {
 			mpClient.sendAsynchronously(client.createPlayerQuitHit());
 		}
 	}
 	
 	public void trackPlayerKick(Client client) {
-		if (is_tracking) {
+		if (is_tracking && !client.isOptedOut()) {
 			mpClient.sendAsynchronously(client.createPlayerKickHit());
 		}
 	}
 	
 	public void trackPlayerChangedWorld(Client client) {
-		if (is_tracking) {
+		if (is_tracking && !client.isOptedOut()) {
 			mpClient.sendAsynchronously(client.createWorldHit());
 		}
 	}
 	
 	private class ScheduledAsynchronousTask implements Runnable {
 		public void run() {
-			for (Client client : OpenAnalytics.getInstance().clientList) {
-				OpenAnalyticsTracker.getMeasurementProtocolClient().send(client.createWorldHit());
+			for (Client client : OpenAnalytics.getInstance().getClientList()) {
+				if (!client.isOptedOut()) {
+					OpenAnalyticsTracker.getMeasurementProtocolClient().send(client.createWorldHit());
+				}
 			}
 		}
 	}
