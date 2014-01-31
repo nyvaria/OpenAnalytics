@@ -4,7 +4,7 @@
   <groupId>net.nyvaria</groupId>
   <artifactId>OpenAnalytics</artifactId>
   <name>OpenAnalytics</name>
-  <version>0.1.03</version>
+  <version>0.2.01</version>
   <description>Minecraft server metrics tracking via Google Analytics</description>
   <url>https://github.com/nyvaria/OpenAnalytics</url>
   <issueManagement>
@@ -93,10 +93,6 @@
                   <pattern>net.nyvaria.component</pattern>
                   <shadedPattern>net.nyvaria.openanalytics.component</shadedPattern>
                 </relocation>
-                <relocation>
-                  <pattern>org.mcstats</pattern>
-                  <shadedPattern>net.nyvaria.openanalytics.mcstats</shadedPattern>
-                </relocation>
               </relocations>
             </configuration>
           </execution>
@@ -111,15 +107,7 @@
       <url>http://repo.bukkit.org/content/groups/public</url>
     </repository>
     <repository>
-      <id>OnARandomBox</id>
-      <url>http://repo.onarandombox.com/content/groups/public</url>
-    </repository>
-    <repository>
-      <id>Plugin Metrics</id>
-      <url>http://repo.mcstats.org/content/repositories/public</url>
-    </repository>
-    <repository>
-      <id>captbunzos-repo</id>
+      <id>repo.pjt.me</id>
       <url>http://repo.pjt.me/content/groups/public/</url>
     </repository>
   </repositories>
@@ -129,18 +117,6 @@
       <artifactId>bukkit</artifactId>
       <version>1.7.2-R0.2</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.onarandombox.multiversecore</groupId>
-      <artifactId>Multiverse-Core</artifactId>
-      <version>2.4</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>junit</artifactId>
-          <groupId>junit</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.wargamer2010</groupId>
