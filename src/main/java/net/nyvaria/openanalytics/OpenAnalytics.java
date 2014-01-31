@@ -29,6 +29,8 @@ import net.nyvaria.component.exception.CannotEnablePluginException;
 import net.nyvaria.component.hook.MetricsHook;
 import net.nyvaria.component.hook.MultiverseHook;
 import net.nyvaria.component.hook.SignShopHook;
+import net.nyvaria.component.hook.VaultHook;
+import net.nyvaria.component.hook.ZPermissionsHook;
 import net.nyvaria.component.wrapper.NyvariaPlugin;
 import net.nyvaria.openanalytics.client.ClientList;
 
@@ -41,8 +43,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  */
 public class OpenAnalytics extends NyvariaPlugin {
-	public  static final String  PERMISSION_BASE = "openanalytics";
-	private static OpenAnalytics instance = null;
+	public  static final String  PERM_ROOT = "openanalytics";
+	private static OpenAnalytics instance  = null;
 	
 	// Listener and Tracker and Lists (oh my)
 	private OpenAnalyticsListener listener     = null;
@@ -82,22 +84,28 @@ public class OpenAnalytics extends NyvariaPlugin {
 			// Then create and register the listener (order is important) 
 			this.listener = new OpenAnalyticsListener(this);
 			
-			// Initialise hooks
+			// Initialise required hooks
+			if (!VaultHook.initialize(this)) {
+				throw new CannotEnablePluginException("Vault not found");
+			}
+			
+			// Initialise optional hooks
 			MetricsHook.initialize(this);
 			MultiverseHook.initialize(this);
 			SignShopHook.initialize(this);
+			ZPermissionsHook.initialize(this);
 			
 			if (SignShopHook.is_hooked()) {
 				this.shopListener = new SignShopListener(this);
 			}
 		
 		} catch (CannotEnablePluginException e) {
-			this.log("Enabling %s failed - %s", this.getNameAndVersion(), e.getMessage());
+			this.log("Enabling %1$s failed - %2$s", this.getNameAndVersion(), e.getMessage());
 			e.printStackTrace();
-			this.setEnabled(false);
+			getServer().getPluginManager().disablePlugin(this);
 			
 		} finally {
-			this.log("Enabling %s successful", this.getNameAndVersion());
+			this.log("Enabling %1$s successful", this.getNameAndVersion());
 		}
 	}
 	
@@ -122,7 +130,7 @@ public class OpenAnalytics extends NyvariaPlugin {
 		if (playerConfigFile.isFile()) {
 			// Attempt to load the player configuration file
 			try {
-				this.log("Loading player configuration file - %s", playerConfigFile.getName());
+				this.log("Loading player configuration file - %1$s", playerConfigFile.getName());
 				config.load(playerConfigFile);
 				
 			} catch (IOException e) {
@@ -136,7 +144,7 @@ public class OpenAnalytics extends NyvariaPlugin {
 			// Attempt to create a new player configuration file
 			try {
 				this.log("Player configuration file not found");
-				this.log("Creating new player configuration file - %s", playerConfigFile.getName());
+				this.log("Creating new player configuration file - %1$s", playerConfigFile.getName());
 				config.save(playerConfigFile);
 				
 			} catch (IOException e) {

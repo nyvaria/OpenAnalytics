@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>net.nyvaria</groupId>
 			<artifactId>NyvariaComponents</artifactId>
-			<version>0.0.05</version>
+			<version>0.0.06</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -114,8 +114,8 @@
 				<configuration>
 					<fork>true</fork>
 					<showDeprecation>true</showDeprecation>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<plugin>

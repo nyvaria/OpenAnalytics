@@ -21,6 +21,8 @@
  */
 package net.nyvaria.openanalytics;
 
+import java.util.logging.Level;
+
 import org.bukkit.scheduler.BukkitTask;
 
 import net.nyvaria.googleanalytics.MeasurementProtocolClient;
@@ -39,19 +41,12 @@ public class OpenAnalyticsTracker {
 	
 	private String  tracking_id;
 	private String  host_name;
-	private boolean is_tracking;
+	private boolean is_tracking = false;
 	
 	public OpenAnalyticsTracker(OpenAnalytics plugin) {
 		this.plugin = plugin;
-		this.is_tracking = initializeMeasurementProtocol();
-		
-		if (is_tracking) {
-			int interval_secs  = 60;
-			int interval_ticks = interval_secs * 20;
-			
-			scheduled_task = plugin.getServer().getScheduler()
-					.runTaskTimerAsynchronously(this.plugin, new ScheduledAsynchronousTask(), interval_ticks, interval_ticks);
-		}
+		initializeMeasurementProtocol();
+		scheduleAsynchronousTask();
 	}
 	
 	public static OpenAnalyticsTracker getInstance() {
@@ -59,16 +54,30 @@ public class OpenAnalyticsTracker {
 	}
 	
 	public boolean initializeMeasurementProtocol() {
-		// Create the measurements protocol client
-		if (plugin.getConfig().contains("tracking-id")) {
-			tracking_id = plugin.getConfig().getString("tracking-id");
-			host_name   = plugin.getConfig().getString("host-name");
-			OpenAnalytics.getInstance().log(String.format("Creating Google Analytics Measurement Protocol client for %s / %s", host_name, tracking_id));
+		if (!is_tracking) {
+			// Create the measurements protocol client
+			tracking_id = OpenAnalyticsConfig.getTrackingID();
+			host_name   = OpenAnalyticsConfig.getHostName();
 			
+			// Check if any of the required config is missing
+			if ((tracking_id == null) || (host_name == null)) {
+				if (tracking_id == null) {
+					OpenAnalytics.getInstance().log(Level.SEVERE, String.format("Configuration missing for %s", OpenAnalyticsConfig.TRACKING_ID));
+				}
+				
+				if (host_name == null) {
+					OpenAnalytics.getInstance().log(Level.SEVERE, String.format("Configuration missing for %s", OpenAnalyticsConfig.HOST_NAME));			
+				}
+				
+				return false;
+			}
+			
+			// Otherwise log a happy message and create the measurement protocol client
+			OpenAnalytics.getInstance().log(String.format("Creating Google Analytics Measurement Protocol client for %s / %s", host_name, tracking_id));
 			mpClient = MeasurementProtocolClient.getInstance(host_name, tracking_id);
-			return true;
 		}
-		return false;
+		
+		return (is_tracking = true);
 	}
 	
 	public static MeasurementProtocolClient getMeasurementProtocolClient() {
@@ -77,6 +86,10 @@ public class OpenAnalyticsTracker {
 	
 	public static BukkitTask getScheduledTask() {
 		return scheduled_task;
+	}
+	
+	public boolean isTracking() {
+		return is_tracking;
 	}
 	
 	public void trackPlayerJoin(Client client) {
@@ -101,6 +114,16 @@ public class OpenAnalyticsTracker {
 	public void trackPlayerChangedWorld(Client client) {
 		if (is_tracking && !client.isOptedOut()) {
 			mpClient.sendAsynchronously(client.createWorldHit());
+		}
+	}
+	
+	public void scheduleAsynchronousTask() {
+		if (is_tracking) {
+			int interval_secs  = 60;
+			int interval_ticks = interval_secs * 20;
+			
+			scheduled_task = plugin.getServer().getScheduler()
+					.runTaskTimerAsynchronously(this.plugin, new ScheduledAsynchronousTask(), interval_ticks, interval_ticks);
 		}
 	}
 	

@@ -5,7 +5,8 @@ version: ${pom.version}
 author: captbunzo
 
 main: net.nyvaria.openanalytics.OpenAnalytics
-softdepend: [Multiverse-Core, SignShop]
+depend: [Vault]
+softdepend: [Multiverse-Core, SignShop, zPermission]
 
 commands:
   analytics:
@@ -14,7 +15,10 @@ commands:
 
 permissions:
   openanalytics.admin:
-    description: Gives access to the /analytics admin commands
+    description: Allow a player to use the "/analytics admin" command
   
   openanalytics.optout:
-    description: Gives access to the /analytics optout command
+    description: Allow a player to opt out/in using the "/analytics optout" command
+
+  openanalytics.optout.other:
+    description: Allow a player to opt out/in other players using the "/analytics optout" command

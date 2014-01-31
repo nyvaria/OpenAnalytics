@@ -21,6 +21,7 @@
  */
 package net.nyvaria.openanalytics.client;
 
+import net.nyvaria.component.wrapper.NyvariaPlayer;
 import net.nyvaria.component.wrapper.NyvariaWorld;
 import net.nyvaria.googleanalytics.MeasurementProtocolClient;
 import net.nyvaria.googleanalytics.hit.EventHit;
@@ -34,25 +35,25 @@ import org.bukkit.entity.Player;
  * @author Paul Thompson
  *
  */
-public class Client {
-	private final Player       player;
+public class Client extends NyvariaPlayer {
 	private final ClientConfig config;
 	
 	public Client(Player player) {
-		this.player = player;
+		super(player);
 		this.config = new ClientConfig(player);
 	}
 	
-	public Player getPlayer() {
-		return player;
+	public Client(OfflinePlayer offlinePlayer) {
+		super(offlinePlayer);
+		this.config = new ClientConfig(offlinePlayer);
 	}
-	
+
 	public String getClientID() {
 		return config.getClientID();
 	}
 	
 	public String getIPAddress() {
-		return this.player.getAddress().getAddress().toString().replace("/", "");
+		return getPlayer().getAddress().getAddress().toString().replace("/", "");
 	}
 	
 	public boolean isOptedOut() {
@@ -129,10 +130,10 @@ public class Client {
 		return "http://"
 				+ MeasurementProtocolClient.getInstance().document_host_name
 				+ "/world/"
-				+ this.player.getLocation().getWorld().getName();
+				+ getPlayer().getLocation().getWorld().getName();
 	}
 	
  	private String getWorldTitle() {
-		return "World - " + NyvariaWorld.getWorldAlias(this.player.getLocation());
+		return "World - " + NyvariaWorld.getWorldAlias(getPlayer().getLocation());
 	}
 }

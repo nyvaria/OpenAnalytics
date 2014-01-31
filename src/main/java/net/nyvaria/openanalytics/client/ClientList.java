@@ -24,6 +24,7 @@ package net.nyvaria.openanalytics.client;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -31,37 +32,57 @@ import org.bukkit.entity.Player;
  *
  */
 public class ClientList implements Iterable<Client> {
-	private HashMap<Player, Client> list;
+	private HashMap<Player, Client> map;
 
 	public ClientList() {
-		this.list = new HashMap<Player, Client>();
+		map = new HashMap<Player, Client>();
+	}
+	
+	public boolean containsKey(Player player) {
+		return map.containsKey(player);
+	}
+	
+	public boolean containsKey(OfflinePlayer offlinePlayer) {
+		return containsKey(offlinePlayer.getPlayer());
 	}
 	
 	public void put(Player player) {
-		if (!this.list.containsKey(player)) {
+		if (!containsKey(player)) {
 			Client client = new Client(player);
-			this.list.put(player, client);
+			map.put(player, client);
 		}
+	}
+	
+	public void put(OfflinePlayer offlinePlayer) {
+		put(offlinePlayer.getPlayer());
 	}
 	
 	public void remove(Player player) {
-		if (this.list.containsKey(player)) {
-			this.list.remove(player);
+		if (map.containsKey(player)) {
+			map.remove(player);
 		}
 	}
 	
+	public void remove(OfflinePlayer offlinePlayer) {
+		remove(offlinePlayer.getPlayer());
+	}
+	
 	public Client get(Player player) {
-		if (this.list.containsKey(player)) {
-			return this.list.get(player);
+		if (map.containsKey(player)) {
+			return map.get(player);
 		}
 		return null;
 	}
 	
+	public Client get(OfflinePlayer offlinePlayer) {
+		return get(offlinePlayer.getPlayer());
+	}
+	
 	public void clear() {
-		this.list.clear();
+		map.clear();
 	}
 
 	public Iterator<Client> iterator() {
-		return list.values().iterator();
+		return map.values().iterator();
 	}
 }
