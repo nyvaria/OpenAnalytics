@@ -52,8 +52,8 @@ public class OpenAnalytics extends NyvariaPlugin {
 	private SignShopListener      shopListener = null;
 	private ClientList            clientList   = null;
 	
-	// Client config file variables 
-	private final File        playerConfigFile = new File(this.getDataFolder(), "players.yml");
+	// Client config file variables
+	private File              playerConfigFile = null;
 	private FileConfiguration playerConfig     = null;
 	
 	public static OpenAnalytics getInstance() {
@@ -126,6 +126,10 @@ public class OpenAnalytics extends NyvariaPlugin {
 	
 	private FileConfiguration loadPlayerConfig() throws CannotEnablePluginException {
 		FileConfiguration config = new YamlConfiguration();
+		
+		if (playerConfigFile == null) {
+			playerConfigFile = new File(this.getDataFolder(), "players.yml");
+		}
 		
 		if (playerConfigFile.isFile()) {
 			// Attempt to load the player configuration file
