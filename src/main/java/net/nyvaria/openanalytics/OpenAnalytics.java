@@ -21,10 +21,6 @@
  */
 package net.nyvaria.openanalytics;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-
 import net.nyvaria.component.exception.CannotEnablePluginException;
 import net.nyvaria.component.hook.MetricsHook;
 import net.nyvaria.component.hook.MultiverseHook;
@@ -35,9 +31,6 @@ import net.nyvaria.component.wrapper.NyvariaPlugin;
 import net.nyvaria.openanalytics.client.ClientList;
 import net.nyvaria.openanalytics.cmd.AnalyticsCommand;
 
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 /**
@@ -57,10 +50,6 @@ public class OpenAnalytics extends NyvariaPlugin {
 	// Commands
 	private AnalyticsCommand      cmdAnalytics = null;
 	
-	// Client config file variables
-	private File              playerConfigFile = null;
-	private FileConfiguration playerConfig     = null;
-	
 	public static OpenAnalytics getInstance() {
 		return instance;
 	}
@@ -79,20 +68,6 @@ public class OpenAnalytics extends NyvariaPlugin {
 			this.saveDefaultConfig();
 			this.getConfig().options().copyDefaults(true);
 			
-			// Load the client config
-			this.playerConfig = loadPlayerConfig();
-			
-			// Create the tracker and client list
-			this.tracker = new OpenAnalyticsTracker(this);
-			
-			this.clientList = new ClientList();
-			for (Player player : this.getServer().getOnlinePlayers()) {
-				this.clientList.put(player);
-			}
-			
-			// Then create and register the listener (order is important) 
-			this.listener = new OpenAnalyticsListener(this);
-			
 			// Initialise required hooks
 			if (!VaultHook.initialize(this)) {
 				throw new CannotEnablePluginException("Vault not found");
@@ -104,11 +79,21 @@ public class OpenAnalytics extends NyvariaPlugin {
 			SignShopHook.initialize(this);
 			ZPermissionsHook.initialize(this);
 			
+			// Create the tracker and client list
+			this.tracker = new OpenAnalyticsTracker(this);
+			
+			this.clientList = new ClientList();
+			for (Player player : this.getServer().getOnlinePlayers()) {
+				this.clientList.put(player);
+			}
+			
+			// Then create and register the listeners
+			this.listener = new OpenAnalyticsListener(this);
 			if (SignShopHook.is_hooked()) {
 				this.shopListener = new SignShopListener(this);
 			}
 			
-			// Hook up the commands
+			// Lastly, hook up the command
 			this.cmdAnalytics = new AnalyticsCommand();
 			this.getCommand(AnalyticsCommand.CMD).setExecutor(cmdAnalytics);
 			
@@ -137,50 +122,6 @@ public class OpenAnalytics extends NyvariaPlugin {
 		this.log("Disabling %s succesful", this.getNameAndVersion());
 	}
 	
-	private FileConfiguration loadPlayerConfig() throws CannotEnablePluginException {
-		FileConfiguration config = new YamlConfiguration();
-		
-		if (playerConfigFile == null) {
-			playerConfigFile = new File(this.getDataFolder(), "players.yml");
-		}
-		
-		if (playerConfigFile.isFile()) {
-			// Attempt to load the player configuration file
-			try {
-				this.log("Loading player configuration file - %1$s", playerConfigFile.getName());
-				config.load(playerConfigFile);
-				
-			} catch (IOException e) {
-				throw new CannotEnablePluginException("Cannot read player configuration file", e);
-				
-			} catch (InvalidConfigurationException e) {
-				throw new CannotEnablePluginException("Invalid player configuraiton file", e);
-			}
-			
-		} else {
-			// Attempt to create a new player configuration file
-			try {
-				this.log("Player configuration file not found");
-				this.log("Creating new player configuration file - %1$s", playerConfigFile.getName());
-				config.save(playerConfigFile);
-				
-			} catch (IOException e) {
-				throw new CannotEnablePluginException("Cannot create new player configuration file", e);
-			}
-		}
-		
-		return config;
-	}
-	
-	public void savePlayerConfig() {
-		try {
-			this.playerConfig.save(this.playerConfigFile);
-		} catch (IOException e) {
-			this.log(Level.WARNING, "Cannot save player configuration file");
-			e.printStackTrace();
-		}
-	}
-
 	/***********/
 	/* Getters */
 	/***********/
@@ -199,9 +140,5 @@ public class OpenAnalytics extends NyvariaPlugin {
 	
 	public ClientList getClientList() {
 		return clientList;
-	}
-	
-	public FileConfiguration getPlayerConfig() {
-		return playerConfig;
 	}
 }

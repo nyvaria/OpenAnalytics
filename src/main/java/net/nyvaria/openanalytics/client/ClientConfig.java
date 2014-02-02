@@ -21,13 +21,17 @@
  */
 package net.nyvaria.openanalytics.client;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import net.nyvaria.openanalytics.OpenAnalytics;
 
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 /**
@@ -35,33 +39,48 @@ import org.bukkit.entity.Player;
  *
  */
 public class ClientConfig {
+	private static final String ANONYMIZED_ID = "anonymized-id";
+	private static final String OPT_OUT       = "opt-out";
+	
 	private final OfflinePlayer offlinePlayer;
 	private final UUID anonymizedID;
 	private final String clientId;
 	private       boolean optout;
 	
+	private FileConfiguration playerConfig;
+	private File playerConfigFile;
+
 	public ClientConfig(Player player) {
 		this((OfflinePlayer) player);
 	}
 	
 	public ClientConfig(OfflinePlayer offlinePlayer) {
-		Configuration playerConfig = OpenAnalytics.getInstance().getPlayerConfig();
-		ConfigurationSection configSection;
+		// Set the player
+		this.offlinePlayer = offlinePlayer;
 		
-		// Load attributes from the player config or create and save it
-		if (playerConfig.contains(offlinePlayer.getName())) {
-			configSection = playerConfig.getConfigurationSection(offlinePlayer.getName());
-		} else {
-			configSection = playerConfig.createSection(offlinePlayer.getName());
-			playerConfig.set(offlinePlayer.getName() + ".anonymized-id", UUID.randomUUID().toString());
-			playerConfig.set(offlinePlayer.getName() + ".opt-out", false);
-			OpenAnalytics.getInstance().savePlayerConfig();
+		// Load the config
+		playerConfig = loadPlayerConfig();
+		boolean changed = false;
+		
+		// Create attributed in the player config if they are missing
+		if (!playerConfig.contains(ANONYMIZED_ID)) {
+			playerConfig.set(ANONYMIZED_ID, UUID.randomUUID().toString());
+			changed = true;
 		}
 		
-		this.offlinePlayer = offlinePlayer;
-		this.anonymizedID  = UUID.fromString(configSection.getString("anonymized-id"));
+		if (!playerConfig.contains(OPT_OUT)) {
+			playerConfig.set(OPT_OUT, false);
+			changed = true;
+		}
+		
+		if (changed) {
+			savePlayerConfig();
+		}
+		
+		// And set the attributes
+		this.anonymizedID  = UUID.fromString(playerConfig.getString(ANONYMIZED_ID));
 		this.clientId      = anonymizedID.toString();
-		this.optout        = configSection.getBoolean("opt-out");
+		this.optout        = playerConfig.getBoolean(OPT_OUT);
 	}
 	
 	public UUID getAnonymizedID() {
@@ -78,7 +97,59 @@ public class ClientConfig {
 	
 	public void setOptOut(boolean optout) {
 		this.optout = optout;
-		OpenAnalytics.getInstance().getPlayerConfig().set(offlinePlayer.getName() + ".opt-out", optout);
-		OpenAnalytics.getInstance().savePlayerConfig();
+		playerConfig.set(OPT_OUT, optout);
+		savePlayerConfig();
+	}
+	
+	// Private methods
+	
+	private String getPlayerConfigPath() {
+		return OpenAnalytics.getInstance().getDataFolder().getPath()
+				+ File.separator + "players"
+				+ File.separator + offlinePlayer.getName() + ".yml";
+	}
+	
+	private FileConfiguration loadPlayerConfig() {
+		FileConfiguration config = new YamlConfiguration();
+		playerConfigFile = new File(getPlayerConfigPath());
+		
+		if (playerConfigFile.isFile()) {
+			// Attempt to load the player configuration file
+			try {
+				OpenAnalytics.getInstance().log(Level.FINE, "Loading player configuration file - %1$s", playerConfigFile.getName());
+				config.load(playerConfigFile);
+				
+			} catch (IOException e) {
+				OpenAnalytics.getInstance().log(Level.WARNING, "Cannot read player configuration file - %1$s", playerConfigFile.getName());
+				e.printStackTrace();
+				
+			} catch (InvalidConfigurationException e) {
+				OpenAnalytics.getInstance().log(Level.WARNING, "Invalid player configuraiton file - %1$s", playerConfigFile.getName());
+				e.printStackTrace();
+			}
+			
+		} else {
+			// Attempt to create a new player configuration file
+			try {
+				OpenAnalytics.getInstance().log(Level.INFO, "Player configuration file not found");
+				OpenAnalytics.getInstance().log(Level.INFO, "Creating new player configuration file - %1$s", playerConfigFile.getName());
+				config.save(playerConfigFile);
+				
+			} catch (IOException e) {
+				OpenAnalytics.getInstance().log(Level.WARNING, "Cannot create new player configuration file - %1$s", playerConfigFile.getName());
+				e.printStackTrace();
+			}
+		}
+		
+		return config;
+	}
+	
+	public void savePlayerConfig() {
+		try {
+			playerConfig.save(this.playerConfigFile);
+		} catch (IOException e) {
+			OpenAnalytics.getInstance().log(Level.WARNING, "Cannot save player configuration file - %1$s", playerConfigFile.getName());
+			e.printStackTrace();
+		}
 	}
 }

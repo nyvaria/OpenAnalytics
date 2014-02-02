@@ -80,7 +80,7 @@ public class AdminSubCommand extends NyvariaSubCommand {
 		// Check if we have enough arguments
 		if (args.length < nextArgIndex+1) {
 			usage(sender, cmd, args, nextArgIndex);
-			return false;
+			return true;
 		}
 		
 		// Get the sub-command name

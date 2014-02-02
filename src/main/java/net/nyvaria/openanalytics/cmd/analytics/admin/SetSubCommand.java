@@ -119,7 +119,7 @@ public class SetSubCommand extends NyvariaSubCommand {
 		// Check if we have enough arguments
 		if (args.length < nextArgIndex+2) {
 			usage(sender, cmd, args, nextArgIndex);
-			return false;
+			return true;
 		}
 		
 		// Get the sub-command name

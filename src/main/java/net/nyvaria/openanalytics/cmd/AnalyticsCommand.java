@@ -57,7 +57,8 @@ public class AnalyticsCommand extends NyvariaCommand implements CommandExecutor,
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		// Check if we have enough arguments
 		if (args.length < 1) {
-			return false;
+			usage(sender, cmd, args);
+			return true;
 		}
 		
 		// Get the sub-command name
