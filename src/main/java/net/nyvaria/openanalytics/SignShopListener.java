@@ -63,9 +63,9 @@ public class SignShopListener implements Listener {
 		
 		// Proceed if the player is not opted out
 		if (!client.isOptedOut()) {
+	    	
 			// Create transaction hits
 			TransactionHit transactionHit = new TransactionHit(client, UUID.randomUUID().toString());
-			transactionHit.transaction_affiliation = event.getOwner().getName(); // Should we do this?
 			transactionHit.transaction_revenue = event.getPrice();
 			transactionHit.currency_code = "USD";
 			
@@ -84,6 +84,7 @@ public class SignShopListener implements Listener {
 			}
 			
 			// Sent the hit list
+	    	event.getPlayer().sendMessage("SignShopListener.onSSPostTransactionEvent - MARK 1 - hitList.size() = " + hitList.size());
 			MeasurementProtocolClient.getInstance().sendAsynchronously(hitList);
 		}
 	}

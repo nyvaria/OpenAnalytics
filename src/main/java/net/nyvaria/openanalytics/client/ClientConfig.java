@@ -35,33 +35,33 @@ import org.bukkit.entity.Player;
  *
  */
 public class ClientConfig {
-	private final Player player;
+	private final OfflinePlayer offlinePlayer;
 	private final UUID anonymizedID;
 	private final String clientId;
 	private       boolean optout;
 	
-	public ClientConfig(OfflinePlayer offlinePlayer) {
-		this(offlinePlayer.getPlayer());
+	public ClientConfig(Player player) {
+		this((OfflinePlayer) player);
 	}
 	
-	public ClientConfig(Player player) {
+	public ClientConfig(OfflinePlayer offlinePlayer) {
 		Configuration playerConfig = OpenAnalytics.getInstance().getPlayerConfig();
 		ConfigurationSection configSection;
 		
 		// Load attributes from the player config or create and save it
-		if (playerConfig.contains(player.getName())) {
-			configSection = playerConfig.getConfigurationSection(player.getName());
+		if (playerConfig.contains(offlinePlayer.getName())) {
+			configSection = playerConfig.getConfigurationSection(offlinePlayer.getName());
 		} else {
-			configSection = playerConfig.createSection(player.getName());
-			playerConfig.set(player.getName() + ".anonymized-id", UUID.randomUUID().toString());
-			playerConfig.set(player.getName() + ".opt-out", false);
+			configSection = playerConfig.createSection(offlinePlayer.getName());
+			playerConfig.set(offlinePlayer.getName() + ".anonymized-id", UUID.randomUUID().toString());
+			playerConfig.set(offlinePlayer.getName() + ".opt-out", false);
 			OpenAnalytics.getInstance().savePlayerConfig();
 		}
 		
-		this.player       = player;
-		this.anonymizedID = UUID.fromString(configSection.getString("anonymized-id"));
-		this.clientId     = anonymizedID.toString();
-		this.optout       = configSection.getBoolean("opt-out");
+		this.offlinePlayer = offlinePlayer;
+		this.anonymizedID  = UUID.fromString(configSection.getString("anonymized-id"));
+		this.clientId      = anonymizedID.toString();
+		this.optout        = configSection.getBoolean("opt-out");
 	}
 	
 	public UUID getAnonymizedID() {
@@ -78,7 +78,7 @@ public class ClientConfig {
 	
 	public void setOptOut(boolean optout) {
 		this.optout = optout;
-		OpenAnalytics.getInstance().getPlayerConfig().set(player.getName() + ".opt-out", optout);
+		OpenAnalytics.getInstance().getPlayerConfig().set(offlinePlayer.getName() + ".opt-out", optout);
 		OpenAnalytics.getInstance().savePlayerConfig();
 	}
 }

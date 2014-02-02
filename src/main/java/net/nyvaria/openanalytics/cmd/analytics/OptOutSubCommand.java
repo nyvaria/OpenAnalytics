@@ -21,6 +21,8 @@
  */
 package net.nyvaria.openanalytics.cmd.analytics;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -54,7 +56,42 @@ public class OptOutSubCommand extends NyvariaSubCommand {
 	
 	@Override
 	public boolean match(String subCmdName) {
+		if (subCmdName == null) return false;
 		return subCmdName.equalsIgnoreCase(CMD_OPTOUT) || subCmdName.equalsIgnoreCase(CMD_OPTIN);
+	}
+	
+	@Override
+	public List<String> getCommands() {
+		return getCommands(null);
+	}
+	
+	@Override
+	public List<String> getCommands(String prefix) {
+		List<String> commands = new ArrayList<String>();
+		if ((prefix == null) || CMD_OPTOUT.startsWith(prefix.toLowerCase())) commands.add(CMD_OPTOUT);
+		if ((prefix == null) || CMD_OPTIN.startsWith(prefix.toLowerCase())) commands.add(CMD_OPTIN);
+		return commands;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String[] args, int nextArgIndex) {
+		List<String> completions = new ArrayList<String>();
+		
+		// If we have one argument, the first is a partial player name
+	    if (args.length == nextArgIndex+1) {
+		    if (sender.hasPermission(PERM_OPTOUT) && sender.hasPermission(PERM_OPTOUT_OTHER) ) {
+		    	String partialPlayerName = args[nextArgIndex];
+		    	
+		    	if (!partialPlayerName.isEmpty()) {
+			    	for (OfflinePlayer nextMatchingOfflinePlayer : NyvariaPlayer.matchOfflinePlayer(partialPlayerName)) {
+				    	completions.add(nextMatchingOfflinePlayer.getName());
+				    }
+			    	Collections.sort(completions);
+		    	}
+		    }
+	    }
+	    
+	    return completions;
 	}
 	
 	private boolean getOptOutInFromSubCmd(String subCmdName) {
@@ -95,7 +132,7 @@ public class OptOutSubCommand extends NyvariaSubCommand {
 				}
 				
 				sender.sendMessage(ChatColor.YELLOW + String.format("Setting %1$s to %2$s of analytics", client.getWrappedName() + ChatColor.YELLOW, cmdName));
-				Client.setOptOut(matches.get(0), optout);
+				client.setOptOut(optout);
 			}
 			
 			return true;
@@ -130,7 +167,7 @@ public class OptOutSubCommand extends NyvariaSubCommand {
 		
 		// Console usage
 		if (sender instanceof ConsoleCommandSender) {
-			sender.sendMessage(ChatColor.YELLOW + String.format("Console Usage: /%1$s %2$s <player>", AnalyticsCommand.CMD, cmdName));
+			sender.sendMessage(ChatColor.YELLOW + String.format("Usage: /%1$s %2$s <player>", AnalyticsCommand.CMD, cmdName));
 			return;
 		}
 	}

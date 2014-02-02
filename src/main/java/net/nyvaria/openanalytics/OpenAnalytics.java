@@ -33,10 +33,12 @@ import net.nyvaria.component.hook.VaultHook;
 import net.nyvaria.component.hook.ZPermissionsHook;
 import net.nyvaria.component.wrapper.NyvariaPlugin;
 import net.nyvaria.openanalytics.client.ClientList;
+import net.nyvaria.openanalytics.cmd.AnalyticsCommand;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 /**
  * @author Paul Thompson
@@ -51,6 +53,9 @@ public class OpenAnalytics extends NyvariaPlugin {
 	private OpenAnalyticsTracker  tracker      = null;
 	private SignShopListener      shopListener = null;
 	private ClientList            clientList   = null;
+	
+	// Commands
+	private AnalyticsCommand      cmdAnalytics = null;
 	
 	// Client config file variables
 	private File              playerConfigFile = null;
@@ -77,9 +82,13 @@ public class OpenAnalytics extends NyvariaPlugin {
 			// Load the client config
 			this.playerConfig = loadPlayerConfig();
 			
-			// Create an empty client list and tracker
-			this.clientList = new ClientList();
+			// Create the tracker and client list
 			this.tracker = new OpenAnalyticsTracker(this);
+			
+			this.clientList = new ClientList();
+			for (Player player : this.getServer().getOnlinePlayers()) {
+				this.clientList.put(player);
+			}
 			
 			// Then create and register the listener (order is important) 
 			this.listener = new OpenAnalyticsListener(this);
@@ -98,7 +107,11 @@ public class OpenAnalytics extends NyvariaPlugin {
 			if (SignShopHook.is_hooked()) {
 				this.shopListener = new SignShopListener(this);
 			}
-		
+			
+			// Hook up the commands
+			this.cmdAnalytics = new AnalyticsCommand();
+			this.getCommand(AnalyticsCommand.CMD).setExecutor(cmdAnalytics);
+			
 		} catch (CannotEnablePluginException e) {
 			this.log("Enabling %1$s failed - %2$s", this.getNameAndVersion(), e.getMessage());
 			e.printStackTrace();

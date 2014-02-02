@@ -57,6 +57,7 @@ public class Client extends NyvariaPlayer {
 	}
 	
 	public boolean isOptedOut() {
+		
 		return config.isOptedOut();
 	}
 	
@@ -65,19 +66,21 @@ public class Client extends NyvariaPlayer {
 	}
 	
 	public static void setOptOut(OfflinePlayer offlinePlayer, boolean optout) {
-		
-	}
-	
-	public static void setOptOut(Player player, boolean optout) {
-		// See if we need to set an online player as opted out
-		Client client = OpenAnalytics.getInstance().getClientList().get(player);
-		if (client != null) {
-			client.setOptOut(optout);
+		if (offlinePlayer.getPlayer() != null) {
+			// See if we need to set an online player as opted out
+			Client client = OpenAnalytics.getInstance().getClientList().get(offlinePlayer.getPlayer());
+			if (client != null) {
+				client.setOptOut(optout);
+			}
 		}
 		
 		// And create a throwaway client config and set the value
-		ClientConfig config = new ClientConfig(player);
+		ClientConfig config = new ClientConfig(offlinePlayer);
 		config.setOptOut(optout);
+	}
+	
+	public static void setOptOut(Player player, boolean optout) {
+		setOptOut((OfflinePlayer) player, optout);
 	}
 	
 	/**********************/

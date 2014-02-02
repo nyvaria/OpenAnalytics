@@ -21,6 +21,9 @@
  */
 package net.nyvaria.openanalytics.cmd.analytics.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -45,7 +48,68 @@ public class SetSubCommand extends NyvariaSubCommand {
 	
 	@Override
 	public boolean match(String subCmdName) {
+		if (subCmdName == null) return false;
 		return subCmdName.equalsIgnoreCase(CMD_SET);
+	}
+	
+	@Override
+	public List<String> getCommands() {
+		return getCommands(null);
+	}
+	
+	@Override
+	public List<String> getCommands(String prefix) {
+		List<String> commands = new ArrayList<String>();
+		if ((prefix == null) || CMD_SET.startsWith(prefix.toLowerCase())) commands.add(CMD_SET);
+		return commands;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String[] args, int nextArgIndex) {
+		List<String> completions = new ArrayList<String>();
+		
+		// Check if we have enough arguments
+		if ((args.length < nextArgIndex+1) || args[nextArgIndex].isEmpty()) {
+			completions.add(OpenAnalyticsConfig.HOST_NAME);
+			completions.add(OpenAnalyticsConfig.TRACKING_ID);
+			completions.add(OpenAnalyticsConfig.USE_METRICS);
+			
+		} else if (args.length < nextArgIndex+2) {
+			String option = args[nextArgIndex].toLowerCase();
+			
+			if (option.equalsIgnoreCase(OpenAnalyticsConfig.HOST_NAME) || option.equals(OpenAnalyticsConfig.TRACKING_ID) || option.equalsIgnoreCase(OpenAnalyticsConfig.USE_METRICS)) {
+				return completions;
+			}
+			
+			if (OpenAnalyticsConfig.HOST_NAME.startsWith(option)) {
+				completions.add(OpenAnalyticsConfig.HOST_NAME);
+			} else if (OpenAnalyticsConfig.TRACKING_ID.startsWith(option)) {
+				completions.add(OpenAnalyticsConfig.TRACKING_ID);
+			} else if (OpenAnalyticsConfig.USE_METRICS.startsWith(option)) {
+				completions.add(OpenAnalyticsConfig.USE_METRICS);
+			}
+			
+		} else {
+			String option = args[nextArgIndex].toLowerCase();
+			String value  = args[nextArgIndex+1].toLowerCase();
+			
+			if (option.equalsIgnoreCase(OpenAnalyticsConfig.USE_METRICS)) {
+				if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+					return completions;
+				}
+				
+				if (value.isEmpty()) {
+					completions.add("true");
+					completions.add("false");
+				} else if ("true".startsWith(value)) {
+					completions.add("true");
+				} else if ("false".startsWith(value)) {
+					completions.add("false");
+				}
+			}
+		}
+		
+	    return completions;
 	}
 	
 	@Override
@@ -53,7 +117,7 @@ public class SetSubCommand extends NyvariaSubCommand {
 		// No permission check as that will already have been done
 		
 		// Check if we have enough arguments
-		if (args.length < nextArgIndex+1) {
+		if (args.length < nextArgIndex+2) {
 			usage(sender, cmd, args, nextArgIndex);
 			return false;
 		}

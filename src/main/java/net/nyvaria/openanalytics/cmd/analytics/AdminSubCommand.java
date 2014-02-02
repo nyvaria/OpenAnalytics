@@ -50,7 +50,25 @@ public class AdminSubCommand extends NyvariaSubCommand {
 	
 	@Override
 	public boolean match(String subCmdName) {
+		if (subCmdName == null) return false;
 		return subCmdName.equalsIgnoreCase(CMD_ADMIN);
+	}
+	
+	@Override
+	public List<String> getCommands() {
+		return getCommands(null);
+	}
+	
+	@Override
+	public List<String> getCommands(String prefix) {
+		List<String> commands = new ArrayList<String>();
+		if ((prefix == null) || CMD_ADMIN.startsWith(prefix.toLowerCase())) commands.add(CMD_ADMIN);
+		return commands;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String[] args, int nextArgIndex) {
+		return NyvariaCommand.onTabCompleteForSubCommands(sender, cmd, subcmds, args, nextArgIndex);
 	}
 	
 	@Override
