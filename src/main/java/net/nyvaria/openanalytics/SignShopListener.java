@@ -84,7 +84,6 @@ public class SignShopListener implements Listener {
 			}
 			
 			// Sent the hit list
-	    	event.getPlayer().sendMessage("SignShopListener.onSSPostTransactionEvent - MARK 1 - hitList.size() = " + hitList.size());
 			MeasurementProtocolClient.getInstance().sendAsynchronously(hitList);
 		}
 	}
