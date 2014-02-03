@@ -30,6 +30,8 @@ import net.nyvaria.component.hook.ZPermissionsHook;
 import net.nyvaria.component.wrapper.NyvariaPlugin;
 import net.nyvaria.openanalytics.client.ClientList;
 import net.nyvaria.openanalytics.cmd.AnalyticsCommand;
+import net.nyvaria.openanalytics.listener.OpenAnalyticsListener;
+import net.nyvaria.openanalytics.listener.SignShopListener;
 
 import org.bukkit.entity.Player;
 

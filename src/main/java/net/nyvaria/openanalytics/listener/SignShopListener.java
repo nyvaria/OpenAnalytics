@@ -19,7 +19,7 @@
 /**
  * 
  */
-package net.nyvaria.openanalytics;
+package net.nyvaria.openanalytics.listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,7 @@ import net.nyvaria.googleanalytics.MeasurementProtocolClient;
 import net.nyvaria.googleanalytics.hit.Hit;
 import net.nyvaria.googleanalytics.hit.ecommerce.TransactionHit;
 import net.nyvaria.googleanalytics.hit.ecommerce.TransactionItemHit;
+import net.nyvaria.openanalytics.OpenAnalytics;
 import net.nyvaria.openanalytics.client.Client;
 
 import org.bukkit.event.EventHandler;
@@ -67,17 +68,28 @@ public class SignShopListener implements Listener {
 			// Create transaction hits
 			TransactionHit transactionHit = new TransactionHit(client, UUID.randomUUID().toString());
 			transactionHit.transaction_revenue = event.getPrice();
+			transactionHit.transaction_affiliation = event.getOwner().getName();
 			transactionHit.currency_code = "USD";
 			
 			// Add the transaction hit to our hit list
 			hitList.add(transactionHit);
 			
+			// Count the total items
+			int totalItems = 0;
+			for (ItemStack stack : event.getItems()) {
+				totalItems += stack.getAmount();
+			}
+			
+			// Derive the per item price
+			float itemPrice = event.getPrice() / totalItems;
+			
 			// Create transaction item hits
 			for (ItemStack stack : event.getItems()) {
 				// Create the transaction item hit
 				TransactionItemHit itemHit = new TransactionItemHit(client, transactionHit.transaction_id, stack.getType().name());
-				itemHit.item_code = String.format("%d", stack.getType().hashCode());
+				itemHit.item_code = stack.getType().name();
 				itemHit.item_quantity = stack.getAmount();
+				itemHit.item_price = itemPrice;
 				
 	    		// Add the transaction item hit to our hit list
 	    		hitList.add(itemHit);

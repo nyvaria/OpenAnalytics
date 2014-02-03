@@ -19,7 +19,9 @@
 /**
  * 
  */
-package net.nyvaria.openanalytics;
+package net.nyvaria.openanalytics.listener;
+
+import net.nyvaria.openanalytics.OpenAnalytics;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

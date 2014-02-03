@@ -1,6 +1,13 @@
 OpenAnalytics Changelog
 =======================
 
+OpenAnalytics v1.0.02 - ?? February 2014
+----------------------------------------
+
+ - Code refactoring
+ - Updated SignShop e-commerce hits to use shop owner for Transaction Affiliation, to use the block name as the Item Code and to calculate a per item price
+ -  
+
 OpenAnalytics v1.0.01 - 02 February 2014
 ----------------------------------------
 
