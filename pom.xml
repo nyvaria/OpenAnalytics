@@ -66,8 +66,7 @@
 		<dependency>
 			<groupId>net.nyvaria</groupId>
 			<artifactId>NyvariaComponents</artifactId>
-			<version>0.0.06</version>
-			<scope>compile</scope>
+			<version>0.0.07</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wargamer2010</groupId>
