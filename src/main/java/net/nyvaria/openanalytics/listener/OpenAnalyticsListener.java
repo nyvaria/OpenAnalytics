@@ -23,6 +23,7 @@ package net.nyvaria.openanalytics.listener;
 
 import net.nyvaria.openanalytics.OpenAnalytics;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -40,6 +41,7 @@ public final class OpenAnalyticsListener implements Listener {
 	private final  OpenAnalytics plugin;
 	
 	public OpenAnalyticsListener(OpenAnalytics plugin) {
+		Validate.notNull(plugin, "OpenAnalyticsListener cannot have a null plugin");
 		this.plugin = plugin;
 		this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
 	}
