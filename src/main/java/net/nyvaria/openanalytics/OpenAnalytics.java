@@ -34,6 +34,7 @@ import net.nyvaria.openanalytics.listener.OpenAnalyticsListener;
 import net.nyvaria.openanalytics.listener.SignShopListener;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author Paul Thompson
@@ -41,7 +42,6 @@ import org.bukkit.entity.Player;
  */
 public class OpenAnalytics extends NyvariaPlugin {
 	public  static final String  PERM_ROOT = "openanalytics";
-	private static OpenAnalytics instance  = null;
 	
 	// Listener and Tracker and Lists (oh my)
 	private OpenAnalyticsListener listener     = null;
@@ -53,7 +53,7 @@ public class OpenAnalytics extends NyvariaPlugin {
 	private AnalyticsCommand      cmdAnalytics = null;
 	
 	public static OpenAnalytics getInstance() {
-		return instance;
+		return JavaPlugin.getPlugin(OpenAnalytics.class);
 	}
 	
 	/*********************************************/
@@ -63,9 +63,6 @@ public class OpenAnalytics extends NyvariaPlugin {
 	@Override
 	public void onEnable() {
 		try {
-			// First set the instance
-			OpenAnalytics.instance = this;
-			
 			// Initialise or update the configuration
 			this.saveDefaultConfig();
 			this.getConfig().options().copyDefaults(true);
@@ -116,9 +113,6 @@ public class OpenAnalytics extends NyvariaPlugin {
 		
 		// Destroy the client map
 		this.clientList = null;
-		
-		// And null the instance
-		OpenAnalytics.instance = null;
 		
 		// Print a lovely log message
 		this.log("Disabling %s succesful", this.getNameAndVersion());
