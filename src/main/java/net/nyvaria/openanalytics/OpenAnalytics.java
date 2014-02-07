@@ -68,15 +68,15 @@ public class OpenAnalytics extends NyvariaPlugin {
 			this.getConfig().options().copyDefaults(true);
 			
 			// Initialise required hooks
-			if (!VaultHook.initialize(this)) {
+			if (!VaultHook.enable(this)) {
 				throw new CannotEnablePluginException("Vault not found");
 			}
 			
 			// Initialise optional hooks
-			MetricsHook.initialize(this);
-			MultiverseHook.initialize(this);
-			SignShopHook.initialize(this);
-			ZPermissionsHook.initialize(this);
+			MetricsHook.enable(this);
+			MultiverseHook.enable(this);
+			SignShopHook.enable(this);
+			ZPermissionsHook.enable(this);
 			
 			// Create the tracker and client list
 			this.tracker = new OpenAnalyticsTracker(this);
