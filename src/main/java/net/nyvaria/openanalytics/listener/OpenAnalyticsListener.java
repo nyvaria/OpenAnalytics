@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-2014
  * Paul Thompson <captbunzo@gmail.com> / Nyvaria <geeks@nyvaria.net>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,12 +17,11 @@
  */
 
 /**
- * 
+ *
  */
 package net.nyvaria.openanalytics.listener;
 
 import net.nyvaria.openanalytics.OpenAnalytics;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -34,43 +33,37 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * @author Paul Thompson
- *
  */
 public final class OpenAnalyticsListener implements Listener {
-	private static OpenAnalyticsListener instance;
-	private final  OpenAnalytics plugin;
-	
-	public OpenAnalyticsListener(OpenAnalytics plugin) {
-		Validate.notNull(plugin, "OpenAnalyticsListener cannot have a null plugin");
-		this.plugin = plugin;
-		this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
-	}
-	
-	public static OpenAnalyticsListener getInstance() {
-		return instance;
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		plugin.getClientList().put(event.getPlayer());
-		plugin.getTracker().trackPlayerJoin(plugin.getClientList().get(event.getPlayer()));
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		plugin.getTracker().trackPlayerQuit(plugin.getClientList().get(event.getPlayer()));
-		plugin.getClientList().remove(event.getPlayer());
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerKick(PlayerKickEvent event) {
-		plugin.getTracker().trackPlayerKick(plugin.getClientList().get(event.getPlayer()));
-		plugin.getClientList().remove(event.getPlayer());
-	}
-	
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
-		plugin.getTracker().trackPlayerChangedWorld(plugin.getClientList().get(event.getPlayer()));
-	}
-	
+    private final OpenAnalytics plugin;
+
+    public OpenAnalyticsListener(OpenAnalytics plugin) {
+        Validate.notNull(plugin, "OpenAnalyticsListener cannot have a null plugin");
+        this.plugin = plugin;
+        this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        plugin.getClientList().put(event.getPlayer());
+        plugin.getTracker().trackPlayerJoin(plugin.getClientList().get(event.getPlayer()));
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        plugin.getTracker().trackPlayerQuit(plugin.getClientList().get(event.getPlayer()));
+        plugin.getClientList().remove(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerKick(PlayerKickEvent event) {
+        plugin.getTracker().trackPlayerKick(plugin.getClientList().get(event.getPlayer()));
+        plugin.getClientList().remove(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+        plugin.getTracker().trackPlayerChangedWorld(plugin.getClientList().get(event.getPlayer()));
+    }
+
 }

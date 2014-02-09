@@ -23,6 +23,7 @@
             <id>captbunzo</id>
             <name>Paul Thompson</name>
             <email>captbunzo@gmail.com</email>
+            <url>https://github.com/captbunzo/</url>
             <roles>
                 <role>developer</role>
             </roles>
@@ -69,7 +70,7 @@
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
         <repository>
-            <id>repo.pjt.me</id>
+            <id>pjt-repo</id>
             <url>http://repo.pjt.me/content/groups/public/</url>
         </repository>
     </repositories>
@@ -85,6 +86,7 @@
             <groupId>net.nyvaria</groupId>
             <artifactId>NyvariaComponents</artifactId>
             <version>0.0.10-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.wargamer2010</groupId>
@@ -157,8 +159,7 @@
                         </goals>
                         <configuration>
                             <minimizeJar>true</minimizeJar>
-                            <dependencyReducedPomLocation>${basedir}/target/dependency-reduced-pom.xml
-                            </dependencyReducedPomLocation>
+                            <dependencyReducedPomLocation>${basedir}/target/dependency-reduced-pom.xml</dependencyReducedPomLocation>
                             <relocations>
                                 <relocation>
                                     <pattern>net.nyvaria.component</pattern>
@@ -172,6 +173,7 @@
         </plugins>
     </build>
 
+    <!--
     <reporting>
         <plugins>
             <plugin>
@@ -185,5 +187,6 @@
             </plugin>
         </plugins>
     </reporting>
+    -->
 
 </project>

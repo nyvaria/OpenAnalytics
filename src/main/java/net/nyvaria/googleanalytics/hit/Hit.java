@@ -129,7 +129,7 @@ public abstract class Hit {
     public String hit_type;
 
     /**
-	 * General Parameters
+     * General Parameters
      */
 
     @Parameter(format = Parameter.FORMAT_BOOLEAN, required = false, name = MeasurementProtocol.ANONYMIZE_IP)
@@ -142,14 +142,14 @@ public abstract class Hit {
     public String cache_buster;
 
     /**
-	 * Session Parameters
+     * Session Parameters
      */
 
     @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.SESSION_CONTROL)
     public String session_control;
 
     /**
-	 * Traffic Source Parameters
+     * Traffic Source Parameters
      */
 
     @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.DOCUMENT_REFERRER)
@@ -205,14 +205,14 @@ public abstract class Hit {
     public String flash_version;
 
     /**
-	 * Hit Parameters
+     * Hit Parameters
      */
 
     @Parameter(format = Parameter.FORMAT_BOOLEAN, required = false, name = MeasurementProtocol.NON_INTERACTION_HIT)
     public Boolean non_interaction_hit;
 
     /**
-	 * Content Information Parameters
+     * Content Information Parameters
      */
 
     @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.DOCUMENT_LOCATION_URL)
@@ -234,7 +234,7 @@ public abstract class Hit {
     public String link_id;
 
     /**
-	 * Custom Dimensions / Metric Parameters
+     * Custom Dimensions / Metric Parameters
      */
 
     // Not Supported Yet
@@ -242,7 +242,7 @@ public abstract class Hit {
     //public HashMap<Integer, Integer> custom_metric;
 
     /**
-	 * Content Experiment Parameters
+     * Content Experiment Parameters
      */
 
     @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.EXPERIMENT_ID)

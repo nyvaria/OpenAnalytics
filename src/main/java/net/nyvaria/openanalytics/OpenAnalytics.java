@@ -22,17 +22,12 @@
 package net.nyvaria.openanalytics;
 
 import net.nyvaria.component.exception.CannotEnablePluginException;
-import net.nyvaria.component.hook.MetricsHook;
-import net.nyvaria.component.hook.MultiverseHook;
-import net.nyvaria.component.hook.SignShopHook;
-import net.nyvaria.component.hook.VaultHook;
-import net.nyvaria.component.hook.ZPermissionsHook;
+import net.nyvaria.component.hook.*;
 import net.nyvaria.component.wrapper.NyvariaPlugin;
 import net.nyvaria.openanalytics.client.ClientList;
 import net.nyvaria.openanalytics.cmd.AnalyticsCommand;
 import net.nyvaria.openanalytics.listener.OpenAnalyticsListener;
 import net.nyvaria.openanalytics.listener.SignShopListener;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,15 +46,16 @@ public class OpenAnalytics extends NyvariaPlugin {
     // Commands
     private AnalyticsCommand cmdAnalytics = null;
 
+    /**
+     * Get the instance of the OpenAnalytics plugin from Bukkit.
+     * @return OpenAnalytics
+     */
     public static OpenAnalytics getInstance() {
         return JavaPlugin.getPlugin(OpenAnalytics.class);
     }
 
-    /*********************************************/
-    /* Override the onEnable & onDisable methods */
-
     /**
-     * *****************************************
+     * Override the onEnable & onDisable methods
      */
 
     @Override
@@ -83,18 +79,19 @@ public class OpenAnalytics extends NyvariaPlugin {
             // Create the tracker and client list
             this.tracker = new OpenAnalyticsTracker(this);
 
+            // Create the client list and add all currently logged in players
             this.clientList = new ClientList();
             for (Player player : this.getServer().getOnlinePlayers()) {
                 this.clientList.put(player);
             }
 
-            // Then create and register the listeners
+            // Create and register the listeners
             this.listener = new OpenAnalyticsListener(this);
-            if (SignShopHook.is_hooked()) {
+            if (SignShopHook.isHooked()) {
                 this.shopListener = new SignShopListener(this);
             }
 
-            // Lastly, hook up the command
+            // Create and set the commands
             this.cmdAnalytics = new AnalyticsCommand();
             this.getCommand(AnalyticsCommand.CMD).setExecutor(cmdAnalytics);
 
@@ -113,18 +110,22 @@ public class OpenAnalytics extends NyvariaPlugin {
         // Destroy the tracker
         this.tracker = null;
 
+        // Disable the hooks
+        VaultHook.disable();
+        ZPermissionsHook.disable();
+        SignShopHook.disable();
+        MultiverseHook.disable();
+        MetricsHook.disable();
+
         // Destroy the client map
         this.clientList = null;
 
         // Print a lovely log message
-        this.log("Disabling %s succesful", this.getNameAndVersion());
+        this.log("Disabling %s successful", this.getNameAndVersion());
     }
 
-    /***********/
-	/* Getters */
-
     /**
-     * *******
+     * Getters
      */
 
     public OpenAnalyticsListener getListener() {
