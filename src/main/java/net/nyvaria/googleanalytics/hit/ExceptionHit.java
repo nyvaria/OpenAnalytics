@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-2014
  * Paul Thompson <captbunzo@gmail.com> / Nyvaria <geeks@nyvaria.net>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +17,7 @@
  */
 
 /**
- * 
+ *
  */
 package net.nyvaria.googleanalytics.hit;
 
@@ -27,33 +27,32 @@ import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
- *
  */
 public class ExceptionHit extends Hit {
-	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
-	private static final String HIT_TYPE = "exception";
-	
-	/************************/
-	/* Exception Parameters */
-	/************************/
-	
-	@Parameter(format="text",    required=true, name=MeasurementProtocol.EXCEPTION_DESCRIPTION)
-	public String exception_description;
-	
-	@Parameter(format="boolean", required=true, name=MeasurementProtocol.EXCEPTION_IS_FATAL)
-	public Boolean exception_is_fatal;
-	
-	/*************************/
-	/* Constructor & Methods */
-	/*************************/
-	
-	public ExceptionHit(Client client, String exception_description, boolean exception_is_fatal) {
-		super(client, ExceptionHit.HIT_TYPE);
-		this.exception_description = exception_description;
-		this.exception_is_fatal    = exception_is_fatal;
-	}
-	
-	public ExceptionHit(Client client, String exception_description) {
-		this(client, exception_description, false);
-	}
+    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    private static final String HIT_TYPE = "exception";
+
+    /**
+     * Constructor & Methods
+     */
+
+    public ExceptionHit(Client client, String exception_description, boolean exception_is_fatal) {
+        super(client, ExceptionHit.HIT_TYPE);
+        this.exception_description = exception_description;
+        this.exception_is_fatal = exception_is_fatal;
+    }
+
+    public ExceptionHit(Client client, String exception_description) {
+        this(client, exception_description, false);
+    }
+
+    /**
+     * Exception Parameters
+     */
+
+    @Parameter(format = "text", required = true, name = MeasurementProtocol.EXCEPTION_DESCRIPTION)
+    public String exception_description;
+
+    @Parameter(format = "boolean", required = true, name = MeasurementProtocol.EXCEPTION_IS_FATAL)
+    public Boolean exception_is_fatal;
 }

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-2014
  * Paul Thompson <captbunzo@gmail.com> / Nyvaria <geeks@nyvaria.net>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +17,7 @@
  */
 
 /**
- * 
+ *
  */
 package net.nyvaria.googleanalytics.hit;
 
@@ -27,13 +27,16 @@ import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
- *
  */
 public class PageViewHit extends Hit {
-	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
-	private static final String HIT_TYPE = "pageview";
-	
-	public PageViewHit(Client client) {
-		super(client, PageViewHit.HIT_TYPE);
-	}
+    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    private static final String HIT_TYPE = "pageview";
+
+    /**
+     * Constructor & Methods
+     */
+
+    public PageViewHit(Client client) {
+        super(client, PageViewHit.HIT_TYPE);
+    }
 }

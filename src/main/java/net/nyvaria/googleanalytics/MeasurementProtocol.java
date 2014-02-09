@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-2014
  * Paul Thompson <captbunzo@gmail.com> / Nyvaria <geeks@nyvaria.net>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,20 +17,19 @@
  */
 
 /**
- * 
+ *
  */
 package net.nyvaria.googleanalytics;
 
 /**
  * @author Paul Thompson
- *
  */
 public abstract class MeasurementProtocol {
 	public static final String ENDPOINT = "http://www.google-analytics.com/collect";
 	public static final String ENDPOINT_PROTOCOL_VERSION = "1";
-	public static final String ENDPOINT_ENCODING = "UTF-8";
-	public static final String ENDPOINT_REQUEST_METHOD = "POST";
-	
+	public static final String ENDPOINT_ENCODING         = "UTF-8";
+	public static final String ENDPOINT_REQUEST_METHOD   = "POST";
+
 	// General Parameters
 	public static final String PROTOCOL_VERSION          = "v";
 	public static final String TRACKING_ID               = "tid";
@@ -40,10 +39,10 @@ public abstract class MeasurementProtocol {
 
 	// Visitor Parameters
 	public static final String CLIENT_ID                 = "cid";
-	
+
 	// Session Parameters
 	public static final String SESSION_CONTROL           = "sc";
-	
+
 	// Traffic Source Parameters
 	public static final String DOCUMENT_REFERRER         = "dr";
 	public static final String CAMPAIGN_NAME             = "cn";
@@ -54,7 +53,7 @@ public abstract class MeasurementProtocol {
 	public static final String CAMPAIGN_ID               = "ci";
 	public static final String ADWORDS_ID                = "gclid";
 	public static final String DISPLAY_ADS_ID            = "dclid";
-	
+
 	// System Info Parameters
 	public static final String SCREEN_RESOLUTION         = "sr";
 	public static final String VIEWPORT_SIZE             = "vp";
@@ -63,11 +62,11 @@ public abstract class MeasurementProtocol {
 	public static final String USER_LANGUAGE             = "ul";
 	public static final String JAVA_ENABLED              = "je";
 	public static final String FLASH_VERSION             = "fl";
-	
+
 	// Hit Parameters
 	public static final String HIT_TYPE                  = "t";
 	public static final String NON_INTERACTION_HIT       = "ni";
-	
+
 	// Content Information Parameters
 	public static final String DOCUMENT_LOCATION_URL     = "dl";
 	public static final String DOCUMENT_HOST_NAME        = "dh";
@@ -75,13 +74,13 @@ public abstract class MeasurementProtocol {
 	public static final String DOCUMENT_TITLE            = "dt";
 	public static final String CONTENT_DESCRIPTION       = "cd";
 	public static final String LINK_ID                   = "linkid";
-	
+
 	// Event Tracking Parameters
 	public static final String EVENT_CATEGORY            = "ec";
 	public static final String EVENT_ACTION              = "ea";
 	public static final String EVENT_LABEL               = "el";
 	public static final String EVENT_VALUE               = "ev";
-	
+
 	// E-Commerce Parameters
 	public static final String TRANSACTION_ID            = "ti";
 	public static final String TRANSACTION_AFFILIATION   = "ta";
@@ -94,12 +93,12 @@ public abstract class MeasurementProtocol {
 	public static final String ITEM_CODE                 = "ic";
 	public static final String ITEM_CATEGORY             = "iv";
 	public static final String CURRENCY_CODE             = "cu";
-	
+
 	// Social Interaction Parameters
 	public static final String SOCIAL_NETWORK            = "sn";
 	public static final String SOCIAL_ACTION             = "sa";
 	public static final String SOCIAL_ACTION_TARGET      = "st";
-	
+
 	// Timing Parameters
 	public static final String USER_TIMING_CATEGORY      = "utc";
 	public static final String USER_TIMING_VARIABLE_NAME = "utv";
@@ -111,17 +110,16 @@ public abstract class MeasurementProtocol {
 	public static final String REDIRECT_RESPONSE_TIME    = "rrt";
 	public static final String TCP_CONNECT_TIME          = "tcp";
 	public static final String SERVER_RESPONSE_TIME      = "srt";
-	
+
 	// Exception Parameters
 	public static final String EXCEPTION_DESCRIPTION     = "exd";
 	public static final String EXCEPTION_IS_FATAL        = "exf";
-	
+
 	// Custom Dimension / Metric Parameter Prefixes
 	public static final String CUSTOM_DIMENSION_PREFIX   = "cd";
 	public static final String CUSTOM_METRIC_PREFIX      = "cm";
-	
+
 	// Content Experiment Parameters
 	public static final String EXPERIMENT_ID             = "xid";
 	public static final String EXPERIMENT_VARIANT        = "xvar";
-	
 }

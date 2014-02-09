@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-2014
  * Paul Thompson <captbunzo@gmail.com> / Nyvaria <geeks@nyvaria.net>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +17,7 @@
  */
 
 /**
- * 
+ *
  */
 package net.nyvaria.googleanalytics;
 
@@ -28,12 +28,13 @@ import java.lang.annotation.Target;
 
 /**
  * @author Paul Thompson
- *
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Parameter {
-	String name();
-	String format();
-	boolean required();
+    String name();
+
+    String format();
+
+    boolean required();
 }

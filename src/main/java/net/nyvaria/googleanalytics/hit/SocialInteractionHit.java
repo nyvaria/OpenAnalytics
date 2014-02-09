@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-2014
  * Paul Thompson <captbunzo@gmail.com> / Nyvaria <geeks@nyvaria.net>
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +17,7 @@
  */
 
 /**
- * 
+ *
  */
 package net.nyvaria.googleanalytics.hit;
 
@@ -27,33 +27,32 @@ import net.nyvaria.openanalytics.client.Client;
 
 /**
  * @author Paul Thompson
- *
  */
 public class SocialInteractionHit extends Hit {
-	@Parameter(format="text", required=true, name=MeasurementProtocol.HIT_TYPE)
-	private static final String HIT_TYPE = "social";
-	
-	/*********************************/
-	/* Social Interaction Parameters */
-	/*********************************/
-	
-	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_NETWORK)
-	public String social_network;
-	
-	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_ACTION)
-	public String social_action;
-	
-	@Parameter(format="text", required=true, name=MeasurementProtocol.SOCIAL_ACTION_TARGET)
-	public String social_action_target;
-	
-	/*************************/
-	/* Constructor & Methods */
-	/*************************/
-	
-	public SocialInteractionHit(Client client, String social_network, String social_action, String social_action_target) {
-		super(client, SocialInteractionHit.HIT_TYPE);
-		this.social_network       = social_network;
-		this.social_action        = social_action;
-		this.social_action_target = social_action_target;
-	}
+    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    private static final String HIT_TYPE = "social";
+
+    /**
+     * Constructor & Methods
+     */
+
+    public SocialInteractionHit(Client client, String social_network, String social_action, String social_action_target) {
+        super(client, SocialInteractionHit.HIT_TYPE);
+        this.social_network = social_network;
+        this.social_action = social_action;
+        this.social_action_target = social_action_target;
+    }
+
+    /**
+     * Social Interaction Parameters
+     */
+
+    @Parameter(format = "text", required = true, name = MeasurementProtocol.SOCIAL_NETWORK)
+    public String social_network;
+
+    @Parameter(format = "text", required = true, name = MeasurementProtocol.SOCIAL_ACTION)
+    public String social_action;
+
+    @Parameter(format = "text", required = true, name = MeasurementProtocol.SOCIAL_ACTION_TARGET)
+    public String social_action_target;
 }

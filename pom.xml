@@ -1,179 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	
-	<groupId>net.nyvaria</groupId>
-	<artifactId>OpenAnalytics</artifactId>
-	<version>1.0.02-SNAPSHOT</version>
-	
-	<name>OpenAnalytics</name>
-	<url>https://github.com/nyvaria/OpenAnalytics</url>
-	<description>Minecraft server metrics tracking via Google Analytics</description>
-	<inceptionYear>2014</inceptionYear>
-	
-	<issueManagement>
-		<system>GitHub</system>
-		<url>https://github.com/nyvaria/OpenAnalytics/issues</url>
-	</issueManagement>
-	
-	<developers>
-		<developer>
-			<id>captbunzo</id>
-			<name>Paul Thompson</name>
-			<email>captbunzo@gmail.com</email>
-			<roles>
-				<role>developer</role>
-			</roles>
-		</developer>
-	</developers>
-	
-	<organization>
-		<name>Nyvaria</name>
-		<url>http://www.nyvaria.net</url>
-	</organization>
-	
-	<scm>
-		<url>https://github.com/nyvaria/OpenAnalytics</url>
-		<connection>scm:git:git://github.com/nyvaria/OpenAnalytics.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/nyvaria/OpenAnalytics.git</developerConnection>
-		<tag>HEAD</tag>
-	</scm>
-	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	
-	<repositories>
-		<repository>
-			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>repo.pjt.me</id>
-			<url>http://repo.pjt.me/content/groups/public/</url>
-		</repository>
-	</repositories>
-	
-	<dependencies>
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.7.2-R0.3-SNAPSHOT</version>
-			<scope>provided</scope>						
-		</dependency>
-		<dependency>
-			<groupId>net.nyvaria</groupId>
-			<artifactId>NyvariaComponents</artifactId>
-			<version>0.0.09</version>
-		</dependency>
-		<dependency>
-			<groupId>org.wargamer2010</groupId>
-			<artifactId>SignShop</artifactId>
-			<version>2.8.2</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
-	
-	<build>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-		<defaultGoal>install</defaultGoal>
-		<directory>${basedir}/target</directory>
-		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-		<outputDirectory>${basedir}/target/classes</outputDirectory>
-		
-		<resources>
-			<resource>
-				<targetPath>.</targetPath>
-				<filtering>true</filtering>
-				<directory>${basedir}/src/main/resources</directory>
-				<includes>
-					<include>plugin.yml</include>
-				</includes>
-			</resource>
-			<resource>
-				<targetPath>.</targetPath>
-				<filtering>false</filtering>
-				<directory>${basedir}/src/main/resources/</directory>
-				<includes>
-					<include>README.md</include>
-					<include>CHANGELOG.md</include>
-					<include>LICENSE</include>
-					<include>config.yml</include>
-				</includes>
-			</resource>
-		</resources>
-		
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<fork>true</fork>
-					<showDeprecation>true</showDeprecation>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<configuration>
-					<links>
-						<link>http://jd.bukkit.org/apidocs</link>
-					</links>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<!-- put your configurations here -->
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<minimizeJar>true</minimizeJar>
-							<relocations>
-								<relocation>
-									<pattern>net.nyvaria.component</pattern>
-									<shadedPattern>net.nyvaria.openanalytics.component</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!--
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.4</version>
-			</plugin>
-			-->
-		</plugins>
-	</build>
-	
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>2.5.2</version>
-				<configuration>
-					<threshold>High</threshold>
-					<effort>Default</effort>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
-	
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.nyvaria</groupId>
+    <artifactId>OpenAnalytics</artifactId>
+    <version>1.0.02-SNAPSHOT</version>
+
+    <name>OpenAnalytics</name>
+    <url>https://github.com/nyvaria/OpenAnalytics</url>
+    <description>Minecraft server metrics tracking via Google Analytics</description>
+    <inceptionYear>2014</inceptionYear>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/nyvaria/OpenAnalytics/issues</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>captbunzo</id>
+            <name>Paul Thompson</name>
+            <email>captbunzo@gmail.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <organization>
+        <name>Nyvaria</name>
+        <url>http://www.nyvaria.net</url>
+    </organization>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <scm>
+        <url>https://github.com/nyvaria/OpenAnalytics</url>
+        <connection>scm:git:git://github.com/nyvaria/OpenAnalytics.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/nyvaria/OpenAnalytics.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://ci.pjt.me</url>
+    </ciManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>pjt-repo-releases</id>
+            <name>repo.pjt.me Releases</name>
+            <url>http://repo.pjt.me/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>pjt-repo-snapshots</id>
+            <name>repo.pjt.me Snapshots</name>
+            <url>http://repo.pjt.me/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>bukkit-repo</id>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>repo.pjt.me</id>
+            <url>http://repo.pjt.me/content/groups/public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.7.2-R0.3-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.nyvaria</groupId>
+            <artifactId>NyvariaComponents</artifactId>
+            <version>0.0.10-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wargamer2010</groupId>
+            <artifactId>SignShop</artifactId>
+            <version>2.8.2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <defaultGoal>install</defaultGoal>
+        <directory>${basedir}/target</directory>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+        <outputDirectory>${basedir}/target/classes</outputDirectory>
+
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>plugin.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>false</filtering>
+                <directory>${basedir}/src/main/resources/</directory>
+                <includes>
+                    <include>README.md</include>
+                    <include>CHANGELOG.md</include>
+                    <include>LICENSE</include>
+                    <include>config.yml</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <fork>true</fork>
+                    <showDeprecation>true</showDeprecation>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <configuration>
+                    <links>
+                        <link>http://jd.bukkit.org/apidocs</link>
+                    </links>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <dependencyReducedPomLocation>${basedir}/target/dependency-reduced-pom.xml
+                            </dependencyReducedPomLocation>
+                            <relocations>
+                                <relocation>
+                                    <pattern>net.nyvaria.component</pattern>
+                                    <shadedPattern>net.nyvaria.openanalytics.component</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <threshold>High</threshold>
+                    <effort>Default</effort>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
 </project>
