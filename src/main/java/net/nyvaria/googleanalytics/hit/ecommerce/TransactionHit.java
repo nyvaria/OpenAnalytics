@@ -30,7 +30,7 @@ import net.nyvaria.openanalytics.client.Client;
  * @author Paul Thompson
  */
 public class TransactionHit extends Hit {
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.HIT_TYPE)
     private static final String HIT_TYPE = "transaction";
 
     /**
@@ -46,21 +46,21 @@ public class TransactionHit extends Hit {
      * Transaction Parameters
      */
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.TRANSACTION_ID)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.TRANSACTION_ID)
     public String transaction_id;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.TRANSACTION_AFFILIATION)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.TRANSACTION_AFFILIATION)
     public String transaction_affiliation;
 
-    @Parameter(format = "currency", required = false, name = MeasurementProtocol.TRANSACTION_REVENUE)
+    @Parameter(format = Parameter.FORMAT_CURRENCY, required = false, name = MeasurementProtocol.TRANSACTION_REVENUE)
     public Float transaction_revenue;
 
-    @Parameter(format = "currency", required = false, name = MeasurementProtocol.TRANSACTION_SHIPPING)
+    @Parameter(format = Parameter.FORMAT_CURRENCY, required = false, name = MeasurementProtocol.TRANSACTION_SHIPPING)
     public Float transaction_shipping;
 
-    @Parameter(format = "currency", required = false, name = MeasurementProtocol.TRANSACTION_TAX)
+    @Parameter(format = Parameter.FORMAT_CURRENCY, required = false, name = MeasurementProtocol.TRANSACTION_TAX)
     public Float transaction_tax;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.CURRENCY_CODE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.CURRENCY_CODE)
     public String currency_code;
 }

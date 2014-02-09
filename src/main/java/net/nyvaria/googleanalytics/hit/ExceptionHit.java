@@ -29,7 +29,7 @@ import net.nyvaria.openanalytics.client.Client;
  * @author Paul Thompson
  */
 public class ExceptionHit extends Hit {
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.HIT_TYPE)
     private static final String HIT_TYPE = "exception";
 
     /**
@@ -50,9 +50,9 @@ public class ExceptionHit extends Hit {
      * Exception Parameters
      */
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.EXCEPTION_DESCRIPTION)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.EXCEPTION_DESCRIPTION)
     public String exception_description;
 
-    @Parameter(format = "boolean", required = true, name = MeasurementProtocol.EXCEPTION_IS_FATAL)
+    @Parameter(format = Parameter.FORMAT_BOOLEAN, required = true, name = MeasurementProtocol.EXCEPTION_IS_FATAL)
     public Boolean exception_is_fatal;
 }

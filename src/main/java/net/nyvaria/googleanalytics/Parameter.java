@@ -32,6 +32,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Parameter {
+    public static String FORMAT_TEXT = "text";
+    public static String FORMAT_BOOLEAN = "boolean";
+    public static String FORMAT_INTEGER = "integer";
+    public static String FORMAT_CURRENCY = "currency";
+
     String name();
 
     String format();

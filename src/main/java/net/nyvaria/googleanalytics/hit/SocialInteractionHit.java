@@ -29,7 +29,7 @@ import net.nyvaria.openanalytics.client.Client;
  * @author Paul Thompson
  */
 public class SocialInteractionHit extends Hit {
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.HIT_TYPE)
     private static final String HIT_TYPE = "social";
 
     /**
@@ -47,12 +47,12 @@ public class SocialInteractionHit extends Hit {
      * Social Interaction Parameters
      */
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.SOCIAL_NETWORK)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.SOCIAL_NETWORK)
     public String social_network;
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.SOCIAL_ACTION)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.SOCIAL_ACTION)
     public String social_action;
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.SOCIAL_ACTION_TARGET)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.SOCIAL_ACTION_TARGET)
     public String social_action_target;
 }

@@ -30,7 +30,7 @@ import net.nyvaria.openanalytics.client.Client;
  * @author Paul Thompson
  */
 public class TransactionItemHit extends Hit {
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.HIT_TYPE)
     private static final String HIT_TYPE = "item";
 
     /**
@@ -47,28 +47,28 @@ public class TransactionItemHit extends Hit {
      * Transaction Parameters
      */
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.TRANSACTION_ID)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.TRANSACTION_ID)
     public String transaction_id;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.CURRENCY_CODE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.CURRENCY_CODE)
     public String currency_code;
 
     /**
 	 * Item Parameters
      */
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.ITEM_NAME)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.ITEM_NAME)
     public String item_name;
 
-    @Parameter(format = "float", required = false, name = MeasurementProtocol.ITEM_PRICE)
+    @Parameter(format = Parameter.FORMAT_CURRENCY, required = false, name = MeasurementProtocol.ITEM_PRICE)
     public Float item_price;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.ITEM_QUANTITY)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.ITEM_QUANTITY)
     public Integer item_quantity;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.ITEM_CODE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.ITEM_CODE)
     public String item_code;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.ITEM_CATEGORY)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.ITEM_CATEGORY)
     public String item_category;
 }

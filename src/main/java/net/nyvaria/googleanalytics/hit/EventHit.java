@@ -29,7 +29,7 @@ import net.nyvaria.openanalytics.client.Client;
  * @author Paul Thompson
  */
 public class EventHit extends Hit {
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.HIT_TYPE)
     private static final String HIT_TYPE = "event";
 
     /**
@@ -46,15 +46,15 @@ public class EventHit extends Hit {
      * Event Parameters
      */
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.EVENT_CATEGORY)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.EVENT_CATEGORY)
     public String event_category;
 
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.EVENT_ACTION)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.EVENT_ACTION)
     public String event_action;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.EVENT_LABEL)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.EVENT_LABEL)
     public String event_label;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.EVENT_VALUE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.EVENT_VALUE)
     public Integer event_value;
 }

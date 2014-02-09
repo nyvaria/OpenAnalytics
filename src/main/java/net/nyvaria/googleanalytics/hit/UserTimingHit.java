@@ -29,7 +29,7 @@ import net.nyvaria.openanalytics.client.Client;
  * @author Paul Thompson
  */
 public class UserTimingHit extends Hit {
-    @Parameter(format = "text", required = true, name = MeasurementProtocol.HIT_TYPE)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = true, name = MeasurementProtocol.HIT_TYPE)
     private static final String HIT_TYPE = "timing";
 
     /**
@@ -44,33 +44,33 @@ public class UserTimingHit extends Hit {
      * User Timing Parameters
      */
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.USER_TIMING_CATEGORY)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.USER_TIMING_CATEGORY)
     public String user_timing_category;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.USER_TIMING_VARIABLE_NAME)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.USER_TIMING_VARIABLE_NAME)
     public String user_timing_variable_name;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.USER_TIMING_TIME)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.USER_TIMING_TIME)
     public Integer user_timing_time;
 
-    @Parameter(format = "text", required = false, name = MeasurementProtocol.USER_TIMING_LABEL)
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.USER_TIMING_LABEL)
     public String user_timing_label;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.PAGE_LOAD_TIME)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.PAGE_LOAD_TIME)
     public Integer page_load_time;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.DNS_TIME)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.DNS_TIME)
     public Integer dns_time;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.PAGE_DOWNLOAD_TIME)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.PAGE_DOWNLOAD_TIME)
     public Integer page_download_time;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.REDIRECT_RESPONSE_TIME)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.REDIRECT_RESPONSE_TIME)
     public Integer redirect_response_time;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.TCP_CONNECT_TIME)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.TCP_CONNECT_TIME)
     public Integer tcp_connect_time;
 
-    @Parameter(format = "integer", required = false, name = MeasurementProtocol.SERVER_RESPONSE_TIME)
+    @Parameter(format = Parameter.FORMAT_INTEGER, required = false, name = MeasurementProtocol.SERVER_RESPONSE_TIME)
     public Integer server_response_time;
 }
