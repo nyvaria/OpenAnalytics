@@ -54,8 +54,8 @@ public class OptOutSubCommand extends NyvariaSubCommand {
 
     @Override
     public boolean match(String subCmdName) {
-        if (subCmdName == null) return false;
-        return subCmdName.equalsIgnoreCase(CMD_OPTOUT) || subCmdName.equalsIgnoreCase(CMD_OPTIN);
+        return (subCmdName != null)
+                && (subCmdName.equalsIgnoreCase(CMD_OPTOUT) || subCmdName.equalsIgnoreCase(CMD_OPTIN));
     }
 
     @Override
@@ -166,7 +166,6 @@ public class OptOutSubCommand extends NyvariaSubCommand {
         // Console usage
         if (sender instanceof ConsoleCommandSender) {
             sender.sendMessage(ChatColor.YELLOW + String.format("Usage: /%1$s %2$s <player>", AnalyticsCommand.CMD, cmdName));
-            return;
         }
     }
 }

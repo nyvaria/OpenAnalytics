@@ -100,7 +100,7 @@ public class MeasurementProtocolClient {
 
             /************************************************************************
              * The response is apparently a single pixel gif (so I am ignoring it). *
-			 * Google says that any respose code other then 2xx should result in    *
+			 * Google says that any response code other then 2xx should result in   *
 			 * stopping sending of metrics and figuring out what is wrong. It would *
 			 * be good to check the response code and stop or pause if we get some  *
 			 * quantity of non-2xx response codes.                                  *
@@ -112,8 +112,7 @@ public class MeasurementProtocolClient {
             //String responseLine;
             //StringBuilder response = new StringBuilder();
             //while ((responseLine = responseReader.readLine()) != null) {
-            //	response.append(responseLine);
-            //	response.append('\n');
+            //	response.append(responseLine).append('\n');
             //}
             //responseReader.close();
 

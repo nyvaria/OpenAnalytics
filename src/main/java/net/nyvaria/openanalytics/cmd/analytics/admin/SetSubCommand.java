@@ -46,8 +46,7 @@ public class SetSubCommand extends NyvariaSubCommand {
 
     @Override
     public boolean match(String subCmdName) {
-        if (subCmdName == null) return false;
-        return subCmdName.equalsIgnoreCase(CMD_SET);
+        return (subCmdName != null) && subCmdName.equalsIgnoreCase(CMD_SET);
     }
 
     @Override
@@ -138,8 +137,8 @@ public class SetSubCommand extends NyvariaSubCommand {
                 OpenAnalyticsConfig.setUseMetrics(true);
             } else if (value.equalsIgnoreCase("false")) {
                 OpenAnalyticsConfig.setUseMetrics(false);
-            } else {
-                // TODO: Do something here
+            //} else {
+            //    TODO: Do something here
             }
 
         } else {

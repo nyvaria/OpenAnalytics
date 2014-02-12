@@ -37,22 +37,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class OpenAnalytics extends NyvariaPlugin {
     public static final String PERM_ROOT = "openanalytics";
 
-    // Listener and Tracker and Lists (oh my)
-    private OpenAnalyticsListener listener = null;
-    private OpenAnalyticsTracker tracker = null;
-    private SignShopListener shopListener = null;
-    private ClientList clientList = null;
-
-    // Commands
-    private AnalyticsCommand cmdAnalytics = null;
-
-    /**
-     * Get the instance of the OpenAnalytics plugin from Bukkit.
-     * @return OpenAnalytics
-     */
-    public static OpenAnalytics getInstance() {
-        return JavaPlugin.getPlugin(OpenAnalytics.class);
-    }
+    // Tracker and Listeners and a List (oh my)
+    private OpenAnalyticsTracker  tracker      = null;
+    private OpenAnalyticsListener listener     = null;
+    private SignShopListener      shopListener = null;
+    private ClientList            clientList   = null;
 
     /**
      * Override the onEnable & onDisable methods
@@ -62,8 +51,8 @@ public class OpenAnalytics extends NyvariaPlugin {
     public void onEnable() {
         try {
             // Initialise or update the configuration
-            this.saveDefaultConfig();
-            this.getConfig().options().copyDefaults(true);
+            saveDefaultConfig();
+            getConfig().options().copyDefaults(true);
 
             // Initialise required hooks
             if (!VaultHook.enable(this)) {
@@ -77,38 +66,40 @@ public class OpenAnalytics extends NyvariaPlugin {
             ZPermissionsHook.enable(this);
 
             // Create the tracker and client list
-            this.tracker = new OpenAnalyticsTracker(this);
+            tracker = new OpenAnalyticsTracker(this);
 
             // Create the client list and add all currently logged in players
-            this.clientList = new ClientList();
-            for (Player player : this.getServer().getOnlinePlayers()) {
-                this.clientList.put(player);
+            clientList = new ClientList();
+            for (Player player : getServer().getOnlinePlayers()) {
+                clientList.put(player);
             }
 
             // Create and register the listeners
-            this.listener = new OpenAnalyticsListener(this);
+            listener = new OpenAnalyticsListener(this);
             if (SignShopHook.isHooked()) {
-                this.shopListener = new SignShopListener(this);
+                shopListener = new SignShopListener(this);
             }
 
-            // Create and set the commands
-            this.cmdAnalytics = new AnalyticsCommand();
-            this.getCommand(AnalyticsCommand.CMD).setExecutor(cmdAnalytics);
+            // Create the commands and set the executors and completers
+            AnalyticsCommand cmdAnalytics = new AnalyticsCommand();
+            getCommand(AnalyticsCommand.CMD).setExecutor(cmdAnalytics);
+            getCommand(AnalyticsCommand.CMD).setTabCompleter(cmdAnalytics);
 
         } catch (CannotEnablePluginException e) {
-            this.log("Enabling %1$s failed - %2$s", this.getNameAndVersion(), e.getMessage());
+            log("Enabling %1$s failed - %2$s", getNameAndVersion(), e.getMessage());
             e.printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
 
         } finally {
-            this.log("Enabling %1$s successful", this.getNameAndVersion());
+            log("Enabling %1$s successful", getNameAndVersion());
         }
     }
 
     @Override
     public void onDisable() {
-        // Destroy the tracker
-        this.tracker = null;
+        // Destroy the listener and tracker
+        listener = null;
+        tracker  = null;
 
         // Disable the hooks
         VaultHook.disable();
@@ -118,10 +109,18 @@ public class OpenAnalytics extends NyvariaPlugin {
         MetricsHook.disable();
 
         // Destroy the client map
-        this.clientList = null;
+        clientList = null;
 
         // Print a lovely log message
-        this.log("Disabling %s successful", this.getNameAndVersion());
+        log("Disabling %s successful", getNameAndVersion());
+    }
+
+    /**
+     * Get the instance of the OpenAnalytics plugin from Bukkit.
+     * @return OpenAnalytics
+     */
+    public static OpenAnalytics getInstance() {
+        return JavaPlugin.getPlugin(OpenAnalytics.class);
     }
 
     /**

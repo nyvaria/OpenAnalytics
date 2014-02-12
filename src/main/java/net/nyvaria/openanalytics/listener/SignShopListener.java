@@ -44,11 +44,9 @@ import org.wargamer2010.signshop.events.SSPostTransactionEvent;
  */
 public class SignShopListener implements Listener {
 	private static SignShopListener instance;
-	private final  OpenAnalytics plugin;
-	
+
 	public SignShopListener(OpenAnalytics plugin) {
-		this.plugin = plugin;
-		this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin);
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public static SignShopListener getInstance() {
@@ -63,7 +61,7 @@ public class SignShopListener implements Listener {
 		Client client = OpenAnalytics.getInstance().getClientList().get(event.getPlayer().getPlayer());
 		
 		// Proceed if the player is not opted out
-		if (!client.isOptedOut()) {
+		if (client.isOptedIn()) {
 	    	
 			// Create transaction hits
 			TransactionHit transactionHit = new TransactionHit(client, UUID.randomUUID().toString());

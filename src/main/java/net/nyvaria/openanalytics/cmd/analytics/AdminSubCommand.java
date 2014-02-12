@@ -48,8 +48,7 @@ public class AdminSubCommand extends NyvariaSubCommand {
 
     @Override
     public boolean match(String subCmdName) {
-        if (subCmdName == null) return false;
-        return subCmdName.equalsIgnoreCase(CMD_ADMIN);
+        return subCmdName != null && subCmdName.equalsIgnoreCase(CMD_ADMIN);
     }
 
     @Override

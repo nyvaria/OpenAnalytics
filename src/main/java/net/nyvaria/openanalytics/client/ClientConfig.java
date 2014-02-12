@@ -89,8 +89,8 @@ public class ClientConfig {
         return clientId;
     }
 
-    public boolean isOptedOut() {
-        return optout;
+    public boolean isOptedIn() {
+        return !optout;
     }
 
     public void setOptOut(boolean optout) {
@@ -122,7 +122,7 @@ public class ClientConfig {
                 e.printStackTrace();
 
             } catch (InvalidConfigurationException e) {
-                OpenAnalytics.getInstance().log(Level.WARNING, "Invalid player configuraiton file - %1$s", playerConfigFile.getName());
+                OpenAnalytics.getInstance().log(Level.WARNING, "Invalid player configuration file - %1$s", playerConfigFile.getName());
                 e.printStackTrace();
             }
 

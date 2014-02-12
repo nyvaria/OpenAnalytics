@@ -54,9 +54,9 @@ public class Client extends NyvariaPlayer {
         return getPlayer().getAddress().getAddress().toString().replace("/", "");
     }
 
-    public boolean isOptedOut() {
+    public boolean isOptedIn() {
 
-        return config.isOptedOut();
+        return config.isOptedIn();
     }
 
     public void setOptOut(boolean optout) {
