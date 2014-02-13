@@ -102,11 +102,11 @@ public class OpenAnalytics extends NyvariaPlugin {
         tracker  = null;
 
         // Disable the hooks
-        VaultHook.disable();
         ZPermissionsHook.disable();
         SignShopHook.disable();
         MultiverseHook.disable();
         MetricsHook.disable();
+        VaultHook.disable();
 
         // Destroy the client map
         clientList = null;
