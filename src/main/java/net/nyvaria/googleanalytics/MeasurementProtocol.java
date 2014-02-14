@@ -36,6 +36,8 @@ public abstract class MeasurementProtocol {
     public static final String ANONYMIZE_IP              = "aip";
     public static final String QUEUE_TIME                = "qt";
     public static final String CACHE_BUSTER              = "z";
+    public static final String IP_OVERRIDE               = "uip";
+    public static final String USER_AGENT_OVERRIDE       = "ua";
 
     // Visitor Parameters
     public static final String CLIENT_ID                 = "cid";

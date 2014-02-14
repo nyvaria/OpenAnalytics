@@ -50,6 +50,7 @@ public abstract class Hit {
         this.tracking_id = MeasurementProtocolClient.getInstance().tracking_id;
         this.hit_type = hit_type;
         this.client_id = client.getClientID();
+        this.ip_override = client.getIPAddress();
     }
 
     public Client getClient() {
@@ -140,6 +141,12 @@ public abstract class Hit {
 
     @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.CACHE_BUSTER)
     public String cache_buster;
+
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.IP_OVERRIDE)
+    public String ip_override;
+
+    @Parameter(format = Parameter.FORMAT_TEXT, required = false, name = MeasurementProtocol.USER_AGENT_OVERRIDE)
+    public String user_agent_override;
 
     /**
      * Session Parameters

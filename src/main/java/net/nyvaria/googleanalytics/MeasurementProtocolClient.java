@@ -73,17 +73,14 @@ public class MeasurementProtocolClient {
     public void send(Hit hit) {
         HttpURLConnection connection = null;
         String payload_data = StringUtils.join(hit.getParameterList(), "&");
-        String ip_address = hit.getClient().getIPAddress();
 
         // Log the query string for now
         OpenAnalytics.getInstance().log(Level.FINE, "Sending data to Google Analytics: " + payload_data);
-        OpenAnalytics.getInstance().log(Level.FINE, "Sending data for IP address: " + ip_address);
 
         try {
             // Create and setup the connection
             connection = (HttpURLConnection) endpoint_url.openConnection();
             connection.setRequestMethod(MeasurementProtocol.ENDPOINT_REQUEST_METHOD);
-            connection.setRequestProperty("X-Forwarded-For", ip_address);
             connection.setUseCaches(false);
             connection.setDoInput(true);
             connection.setDoOutput(true);
@@ -100,10 +97,10 @@ public class MeasurementProtocolClient {
 
             /************************************************************************
              * The response is apparently a single pixel gif (so I am ignoring it). *
-			 * Google says that any response code other then 2xx should result in   *
-			 * stopping sending of metrics and figuring out what is wrong. It would *
-			 * be good to check the response code and stop or pause if we get some  *
-			 * quantity of non-2xx response codes.                                  *
+             * Google says that any response code other then 2xx should result in   *
+             * stopping sending of metrics and figuring out what is wrong. It would *
+             * be good to check the response code and stop or pause if we get some  *
+             * quantity of non-2xx response codes.                                  *
              ************************************************************************/
 
             // Read response

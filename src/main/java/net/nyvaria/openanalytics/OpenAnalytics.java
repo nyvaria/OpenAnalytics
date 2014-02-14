@@ -37,6 +37,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class OpenAnalytics extends NyvariaPlugin {
     public static final String PERM_ROOT = "openanalytics";
 
+    // Gotta stay with an instance variable until spigot updates to 1.7.4
+    private static OpenAnalytics instance = null;
+
     // Tracker and Listeners and a List (oh my)
     private OpenAnalyticsTracker  tracker      = null;
     private OpenAnalyticsListener listener     = null;
@@ -50,6 +53,9 @@ public class OpenAnalytics extends NyvariaPlugin {
     @Override
     public void onEnable() {
         try {
+            // Save the instance
+            OpenAnalytics.instance = this;
+
             // Initialise or update the configuration
             saveDefaultConfig();
             getConfig().options().copyDefaults(true);
@@ -89,6 +95,7 @@ public class OpenAnalytics extends NyvariaPlugin {
             log("Enabling %1$s failed - %2$s", getNameAndVersion(), e.getMessage());
             e.printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
+            OpenAnalytics.instance = null;
 
         } finally {
             log("Enabling %1$s successful", getNameAndVersion());
@@ -111,6 +118,9 @@ public class OpenAnalytics extends NyvariaPlugin {
         // Destroy the client map
         clientList = null;
 
+        // Clear the instance
+        OpenAnalytics.instance = null;
+
         // Print a lovely log message
         log("Disabling %s successful", getNameAndVersion());
     }
@@ -120,7 +130,8 @@ public class OpenAnalytics extends NyvariaPlugin {
      * @return OpenAnalytics
      */
     public static OpenAnalytics getInstance() {
-        return JavaPlugin.getPlugin(OpenAnalytics.class);
+        //return JavaPlugin.getPlugin(OpenAnalytics.class);
+        return instance;
     }
 
     /**
