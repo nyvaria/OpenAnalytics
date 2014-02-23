@@ -1,10 +1,10 @@
 OpenAnalytics Changelog
 =======================
 
-OpenAnalytics v1.0.03 - ?? February 2014
+OpenAnalytics v1.0.03 - 23 February 2014
 ----------------------------------------
 
- - ???
+ - Fixed NullPointerException on Player Kick
 
 OpenAnalytics v1.0.02 - 14 February 2014
 ----------------------------------------
