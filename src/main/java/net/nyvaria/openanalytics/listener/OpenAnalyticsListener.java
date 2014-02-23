@@ -51,8 +51,11 @@ public final class OpenAnalyticsListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        plugin.getTracker().trackPlayerQuit(plugin.getClientList().get(event.getPlayer()));
-        plugin.getClientList().remove(event.getPlayer());
+        // When a PlayerQuitEvent is called following a PlayerKickEvent, we do not want to do this
+        if (plugin.getClientList().containsKey(event.getPlayer())) {
+            plugin.getTracker().trackPlayerQuit(plugin.getClientList().get(event.getPlayer()));
+            plugin.getClientList().remove(event.getPlayer());
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

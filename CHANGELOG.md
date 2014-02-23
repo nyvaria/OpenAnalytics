@@ -1,6 +1,11 @@
 OpenAnalytics Changelog
 =======================
 
+OpenAnalytics v1.0.03 - ?? February 2014
+----------------------------------------
+
+ - ???
+
 OpenAnalytics v1.0.02 - 14 February 2014
 ----------------------------------------
 
