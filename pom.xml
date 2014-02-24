@@ -5,12 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.nyvaria</groupId>
-    <artifactId>OpenAnalytics</artifactId>
-    <version>1.0.03</version>
+    <artifactId>OpenAnalytics-parent</artifactId>
+    <version>1.1.01-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-    <name>OpenAnalytics</name>
+    <name>OpenAnalytics-Parent</name>
     <url>https://github.com/nyvaria/OpenAnalytics</url>
-    <description>Minecraft server metrics tracking via Google Analytics</description>
+    <description>Parent project for all OpenAnalytics modules</description>
     <inceptionYear>2014</inceptionYear>
 
     <issueManagement>
@@ -75,118 +76,9 @@
         </repository>
     </repositories>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.7.2-R0.3-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.nyvaria</groupId>
-            <artifactId>NyvariaComponents</artifactId>
-            <version>0.0.11-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wargamer2010</groupId>
-            <artifactId>SignShop</artifactId>
-            <version>2.8.2</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
-        <defaultGoal>install</defaultGoal>
-        <directory>${basedir}/target</directory>
-        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <outputDirectory>${basedir}/target/classes</outputDirectory>
-
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>${basedir}/src/main/resources</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
-            </resource>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>false</filtering>
-                <directory>${basedir}/src/main/resources/</directory>
-                <includes>
-                    <include>README.md</include>
-                    <include>CHANGELOG.md</include>
-                    <include>LICENSE</include>
-                    <include>config.yml</include>
-                </includes>
-            </resource>
-        </resources>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <fork>true</fork>
-                    <showDeprecation>true</showDeprecation>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <configuration>
-                    <links>
-                        <link>http://jd.bukkit.org/apidocs</link>
-                    </links>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <dependencyReducedPomLocation>${basedir}/target/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                            <relocations>
-                                <relocation>
-                                    <pattern>net.nyvaria.component</pattern>
-                                    <shadedPattern>net.nyvaria.openanalytics.component</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-    <!--
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <threshold>High</threshold>
-                    <effort>Default</effort>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
-    -->
+    <modules>
+        <module>bukkit</module>
+        <module>bungee</module>
+    </modules>
 
 </project>

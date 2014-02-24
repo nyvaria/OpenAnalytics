@@ -1,0 +1,6 @@
+#
+# OpenAnalyticsProxy Configuration
+#
+
+use-metrics: true
+
