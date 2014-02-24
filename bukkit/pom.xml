@@ -15,7 +15,7 @@
     <artifactId>OpenAnalytics-bukkit</artifactId>
     <version>1.1.01-SNAPSHOT</version>
 
-    <name>OpenAnalytics-Bukkit</name>
+    <name>OpenAnalytics</name>
     <url>https://github.com/nyvaria/OpenAnalytics</url>
     <description>Bukkit server metrics tracking via Google Analytics</description>
     <inceptionYear>2014</inceptionYear>

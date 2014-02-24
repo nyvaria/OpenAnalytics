@@ -23,7 +23,7 @@ package net.nyvaria.openanalytics.bungee;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
-import net.nyvaria.openanalytics.bungee.client.ProxiedClientList;
+import net.nyvaria.openanalytics.bungee.client.ClientList;
 
 import java.util.logging.Level;
 
@@ -31,12 +31,12 @@ import java.util.logging.Level;
  * Created by Paul Thompson on 23/02/2014.
  * @author Paul Thompson
  */
-public class OpenAnalyticsProxy extends Plugin {
-    private static OpenAnalyticsProxy instance = null;
+public class OpenAnalyticsBungee extends Plugin {
+    private static OpenAnalyticsBungee instance = null;
 
     // Listener and list
-    private OpenAnalyticsProxyListener listener = null;
-    private ProxiedClientList proxiedClientList = null;
+    private OpenAnalyticsBungeeListener listener = null;
+    private ClientList clientList = null;
 
     /**
      * Override the onEnable & onDisable methods
@@ -45,16 +45,16 @@ public class OpenAnalyticsProxy extends Plugin {
     @Override
     public void onEnable() {
         // Save the instance
-        OpenAnalyticsProxy.instance = this;
+        OpenAnalyticsBungee.instance = this;
 
         // Create the proxied client list and add all currently logged in players
-        proxiedClientList = new ProxiedClientList();
+        clientList = new ClientList();
         for (ProxiedPlayer player : getProxy().getPlayers()) {
-            proxiedClientList.put(player);
+            clientList.put(player);
         }
 
         // Create and register the listeners
-        listener = new OpenAnalyticsProxyListener(this);
+        listener = new OpenAnalyticsBungeeListener(this);
 
         // Log a happy message
         log("Enabling %1$s successful", getNameAndVersion());
@@ -63,20 +63,20 @@ public class OpenAnalyticsProxy extends Plugin {
     @Override
     public void onDisable() {
         // Destroy the client list
-        proxiedClientList = null;
+        clientList = null;
 
         // Clear the instance
-        OpenAnalyticsProxy.instance = null;
+        OpenAnalyticsBungee.instance = null;
 
         // Log an unhappy message
         log("Disabling %1$s successful", getNameAndVersion());
     }
 
     /**
-     * Get the instance of the OpenAnalyticsProxy plugin from the Proxy.
-     * @return OpenAnalyticsProxy
+     * Get the instance of the OpenAnalyticsBungee plugin from the Proxy.
+     * @return OpenAnalyticsBungee
      */
-    public static OpenAnalyticsProxy getInstance() {
+    public static OpenAnalyticsBungee getInstance() {
         return instance;
     }
 
@@ -84,12 +84,12 @@ public class OpenAnalyticsProxy extends Plugin {
      * Getters
      */
 
-    public OpenAnalyticsProxyListener getListener() {
+    public OpenAnalyticsBungeeListener getListener() {
         return listener;
     }
 
-    public ProxiedClientList getProxiedClientList() {
-        return proxiedClientList;
+    public ClientList getClientList() {
+        return clientList;
     }
 
     /**

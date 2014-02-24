@@ -31,21 +31,21 @@ import net.md_5.bungee.event.EventPriority;
  * Created by Paul Thompson on 23/02/2014.
  * @author Paul Thompson
  */
-public class OpenAnalyticsProxyListener implements Listener {
-    private final OpenAnalyticsProxy plugin;
+public class OpenAnalyticsBungeeListener implements Listener {
+    private final OpenAnalyticsBungee plugin;
 
-    public OpenAnalyticsProxyListener(OpenAnalyticsProxy plugin) {
+    public OpenAnalyticsBungeeListener(OpenAnalyticsBungee plugin) {
         this.plugin = plugin;
         this.plugin.getProxy().getPluginManager().registerListener(this.plugin, this);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPostLoginEvent(PostLoginEvent event) {
-        plugin.getProxiedClientList().put(event.getPlayer());
+        plugin.getClientList().put(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDisconnectEvent(PlayerDisconnectEvent event) {
-        plugin.getProxiedClientList().remove(event.getPlayer());
+        plugin.getClientList().remove(event.getPlayer());
     }
 }

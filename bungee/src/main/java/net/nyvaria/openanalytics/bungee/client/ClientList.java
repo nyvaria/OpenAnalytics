@@ -30,11 +30,11 @@ import java.util.Iterator;
  * Created by Paul Thompson on 23/02/2014.
  * @author Paul Thompson
  */
-public class ProxiedClientList implements Iterable<ProxiedClient> {
-    HashMap<ProxiedPlayer, ProxiedClient> map;
+public class ClientList implements Iterable<Client> {
+    HashMap<ProxiedPlayer, Client> map;
 
-    public ProxiedClientList() {
-        map = new HashMap<ProxiedPlayer, ProxiedClient>();
+    public ClientList() {
+        map = new HashMap<ProxiedPlayer, Client>();
     }
 
     public boolean containsKey(ProxiedPlayer player) {
@@ -43,7 +43,7 @@ public class ProxiedClientList implements Iterable<ProxiedClient> {
 
     public void put(ProxiedPlayer player) {
         if (!containsKey(player)) {
-            map.put(player, new ProxiedClient(player));
+            map.put(player, new Client(player));
         }
     }
 
@@ -53,7 +53,7 @@ public class ProxiedClientList implements Iterable<ProxiedClient> {
         }
     }
 
-    public ProxiedClient get(ProxiedPlayer player) {
+    public Client get(ProxiedPlayer player) {
         if (map.containsKey(player)) {
             return map.get(player);
         }
@@ -65,7 +65,7 @@ public class ProxiedClientList implements Iterable<ProxiedClient> {
     }
 
     @Override
-    public Iterator<ProxiedClient> iterator() {
+    public Iterator<Client> iterator() {
         return map.values().iterator();
     }
 }

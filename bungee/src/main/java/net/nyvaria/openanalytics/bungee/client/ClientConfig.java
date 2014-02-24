@@ -22,10 +22,11 @@
 package net.nyvaria.openanalytics.bungee.client;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.nyvaria.openanalytics.bungee.OpenAnalyticsProxy;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import net.md_5.bungee.config.Configuration;
+import net.md_5.bungee.config.ConfigurationProvider;
+import net.md_5.bungee.config.YamlConfiguration;
+import net.nyvaria.openanalytics.bungee.OpenAnalyticsBungee;
+import org.apache.commons.lang.ObjectUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,19 +37,21 @@ import java.util.logging.Level;
  * Created by Paul Thompson on 23/02/2014.
  * @author Paul Thompson
  */
-public class ProxiedClientConfig {
+public class ClientConfig {
     private static final String ANONYMIZED_ID = "anonymized-id";
     private static final String OPT_OUT = "opt-out";
 
-    private final ProxiedPlayer player;
-    private final UUID anonymizedID;
-    private final String clientID;
-    private boolean optout;
+    private ProxiedPlayer player = null;
+    private UUID anonymizedID = null;
+    private String clientID = null;
+    private Boolean optout = null;
 
-    private FileConfiguration playerConfig;
+    private Configuration playerConfig;
+
+    //private FileConfiguration playerConfig;
     private File playerConfigFile;
 
-    public ProxiedClientConfig(ProxiedPlayer player) {
+    public ClientConfig(ProxiedPlayer player) {
         // Set the player
         this.player = player;
 
@@ -57,13 +60,27 @@ public class ProxiedClientConfig {
         boolean changed = false;
 
         // Create attributes in the player config if they are missing
-        if (!playerConfig.contains(ANONYMIZED_ID)) {
-            playerConfig.set(ANONYMIZED_ID, UUID.randomUUID().toString());
+        try {
+            anonymizedID = UUID.fromString(playerConfig.getString(ANONYMIZED_ID));
+        } catch (NullPointerException e) {
+            anonymizedID = null;
+        }
+
+        if (anonymizedID == null) {
+            anonymizedID = UUID.randomUUID();
+            playerConfig.set(ANONYMIZED_ID, anonymizedID.toString());
             changed = true;
         }
 
-        if (!playerConfig.contains(OPT_OUT)) {
-            playerConfig.set(OPT_OUT, false);
+        try {
+            optout = playerConfig.getBoolean(OPT_OUT);
+        } catch (NullPointerException e) {
+            optout = null;
+        }
+
+        if (optout == null) {
+            optout = false;
+            playerConfig.set(OPT_OUT, optout);
             changed = true;
         }
 
@@ -98,39 +115,41 @@ public class ProxiedClientConfig {
     // Private methods
 
     private String getPlayerConfigPath() {
-        return OpenAnalyticsProxy.getInstance().getDataFolder().getPath()
+        return OpenAnalyticsBungee.getInstance().getDataFolder().getPath()
                 + File.separator + "players"
                 + File.separator + player.getName() + ".yml";
     }
 
-    private FileConfiguration loadPlayerConfig() {
-        FileConfiguration config = new YamlConfiguration();
+    private Configuration loadPlayerConfig() {
+        Configuration config = null;
         playerConfigFile = new File(getPlayerConfigPath());
+
+        if (!playerConfigFile.getParentFile().exists()) {
+            playerConfigFile.getParentFile().mkdirs();
+        }
 
         if (playerConfigFile.isFile()) {
             // Attempt to load the player configuration file
             try {
-                OpenAnalyticsProxy.getInstance().log(Level.FINE, "Loading player configuration file - %1$s", playerConfigFile.getName());
-                config.load(playerConfigFile);
-
+                OpenAnalyticsBungee.getInstance().log(Level.INFO, "Loading player configuration file - %1$s", playerConfigFile.getName());
+                config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(playerConfigFile);
             } catch (IOException e) {
-                OpenAnalyticsProxy.getInstance().log(Level.WARNING, "Cannot read player configuration file - %1$s", playerConfigFile.getName());
-                e.printStackTrace();
-
-            } catch (InvalidConfigurationException e) {
-                OpenAnalyticsProxy.getInstance().log(Level.WARNING, "Invalid player configuration file - %1$s", playerConfigFile.getName());
+                OpenAnalyticsBungee.getInstance().log(Level.WARNING, "Cannot read player configuration file - %1$s", playerConfigFile.getName());
                 e.printStackTrace();
             }
 
         } else {
             // Attempt to create a new player configuration file
             try {
-                OpenAnalyticsProxy.getInstance().log(Level.INFO, "Player configuration file not found");
-                OpenAnalyticsProxy.getInstance().log(Level.INFO, "Creating new player configuration file - %1$s", playerConfigFile.getName());
-                config.save(playerConfigFile);
+                OpenAnalyticsBungee.getInstance().log(Level.INFO, "Player configuration file not found");
+                OpenAnalyticsBungee.getInstance().log(Level.INFO, "Creating new player configuration file - %1$s", playerConfigFile.getName());
+
+                // Create and load the new file
+                playerConfigFile.createNewFile();
+                config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(playerConfigFile);
 
             } catch (IOException e) {
-                OpenAnalyticsProxy.getInstance().log(Level.WARNING, "Cannot create new player configuration file - %1$s", playerConfigFile.getName());
+                OpenAnalyticsBungee.getInstance().log(Level.WARNING, "Cannot create new player configuration file - %1$s", playerConfigFile.getName());
                 e.printStackTrace();
             }
         }
@@ -140,9 +159,9 @@ public class ProxiedClientConfig {
 
     public void savePlayerConfig() {
         try {
-            playerConfig.save(this.playerConfigFile);
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(playerConfig, playerConfigFile);
         } catch (IOException e) {
-            OpenAnalyticsProxy.getInstance().log(Level.WARNING, "Cannot save player configuration file - %1$s", playerConfigFile.getName());
+            OpenAnalyticsBungee.getInstance().log(Level.WARNING, "Cannot save player configuration file - %1$s", playerConfigFile.getName());
             e.printStackTrace();
         }
     }

@@ -1,5 +1,5 @@
-name: OpenAnalyticsProxy
+name: ${pom.name}
 description: ${pom.description}
 version: ${pom.version}
 author: captbunzo
-main: net.nyvaria.openanalytics.bungee.OpenAnalyticsProxy
+main: net.nyvaria.openanalytics.bungee.OpenAnalyticsBungee

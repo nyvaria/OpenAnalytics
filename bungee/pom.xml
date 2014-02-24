@@ -15,7 +15,7 @@
     <artifactId>OpenAnalytics-bungee</artifactId>
     <version>1.1.01-SNAPSHOT</version>
 
-    <name>OpenAnalytics-Bungee</name>
+    <name>OpenAnalyticsBungee</name>
     <url>https://github.com/nyvaria/OpenAnalytics</url>
     <description>Bungee proxy server metrics tracking via Google Analytics</description>
     <inceptionYear>2014</inceptionYear>
@@ -123,32 +123,6 @@
                         <configuration>
                             <minimizeJar>true</minimizeJar>
                             <dependencyReducedPomLocation>${basedir}/target/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-                            <relocations>
-                                <relocation>
-                                    <pattern>org.bukkit</pattern>
-                                    <shadedPattern>net.nyvaria.openanalytics.bukkit</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.avaje</pattern>
-                                    <shadedPattern>net.nyvaria.openanalytics.avaje</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.google</pattern>
-                                    <shadedPattern>net.nyvaria.openanalytics.google</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>javax</pattern>
-                                    <shadedPattern>net.nyvaria.openanalytics.javax</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.apache</pattern>
-                                    <shadedPattern>net.nyvaria.openanalytics.apache</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.yaml</pattern>
-                                    <shadedPattern>net.nyvaria.openanalytics.yaml</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>

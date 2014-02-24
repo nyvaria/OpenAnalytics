@@ -1,4 +1,4 @@
-name: OpenAnalytics
+name: ${pom.name}
 description: ${pom.description}
 website: ${pom.url}
 version: ${pom.version}

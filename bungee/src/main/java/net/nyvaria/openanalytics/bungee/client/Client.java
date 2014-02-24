@@ -22,19 +22,19 @@
 package net.nyvaria.openanalytics.bungee.client;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.nyvaria.openanalytics.bungee.OpenAnalyticsProxy;
+import net.nyvaria.openanalytics.bungee.OpenAnalyticsBungee;
 
 /**
  * Created by Paul Thompson on 23/02/2014.
  * @author Paul Thompson
  */
-public class ProxiedClient {
+public class Client {
     private final ProxiedPlayer player;
-    private final ProxiedClientConfig config;
+    private final ClientConfig config;
 
-    public ProxiedClient(ProxiedPlayer player) {
+    public Client(ProxiedPlayer player) {
         this.player = player;
-        this.config = new ProxiedClientConfig(player);
+        this.config = new ClientConfig(player);
     }
 
     public String getClientID() {
@@ -54,12 +54,12 @@ public class ProxiedClient {
     }
 
     public static void setOptOut(ProxiedPlayer player, boolean optout) {
-        ProxiedClient client = OpenAnalyticsProxy.getInstance().getProxiedClientList().get(player);
+        Client client = OpenAnalyticsBungee.getInstance().getClientList().get(player);
 
         if (client != null) {
             client.setOptOut(optout);
         } else {
-            ProxiedClientConfig config = new ProxiedClientConfig(player);
+            ClientConfig config = new ClientConfig(player);
             config.setOptOut(optout);
         }
     }
