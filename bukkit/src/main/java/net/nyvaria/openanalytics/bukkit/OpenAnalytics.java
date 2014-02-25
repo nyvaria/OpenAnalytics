@@ -58,6 +58,7 @@ public class OpenAnalytics extends NyvariaPlugin {
             // Initialise or update the configuration
             saveDefaultConfig();
             getConfig().options().copyDefaults(true);
+            saveConfig();
 
             // Initialise required hooks
             if (!VaultHook.enable(this)) {
@@ -65,11 +66,19 @@ public class OpenAnalytics extends NyvariaPlugin {
             }
 
             // Initialise optional hooks
-            //BungeeHook.enable(this);
             MetricsHook.enable(this);
             MultiverseHook.enable(this);
-            SignShopHook.enable(this);
             ZPermissionsHook.enable(this);
+
+            // Hook SignShop if enabled
+            if (OpenAnalyticsConfig.getUseSignShop()) {
+                SignShopHook.enable(this);
+            }
+
+            // Hook BungeeCord if enabled
+            if (OpenAnalyticsConfig.getInBungeeCord()) {
+                BungeeHook.enable(this);
+            }
 
             // Create the tracker
             tracker = new OpenAnalyticsTracker(this);
@@ -109,11 +118,11 @@ public class OpenAnalytics extends NyvariaPlugin {
         tracker  = null;
 
         // Disable the hooks
-        ZPermissionsHook.disable();
+        BungeeHook.disable();
         SignShopHook.disable();
+        ZPermissionsHook.disable();
         MultiverseHook.disable();
         MetricsHook.disable();
-        //BungeeHook.disable();
         VaultHook.disable();
 
         // Destroy the client list

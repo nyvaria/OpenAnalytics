@@ -2,7 +2,9 @@
 # OpenAnalytics Configuration
 #
 
-use-metrics: true
 tracking-id: UA-XXXXXXXX-Y
 host-name: server.com
+use-metrics: true
+use-signshop: true
+in-bungeecord: false
 

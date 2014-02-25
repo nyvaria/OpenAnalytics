@@ -25,12 +25,19 @@ package net.nyvaria.openanalytics.bukkit;
  * @author Paul Thompson
  */
 public class OpenAnalyticsConfig {
-    public static final String TRACKING_ID = "tracking-id";
-    public static final String HOST_NAME   = "host-name";
-    public static final String USE_METRICS = "use-metrics";
+    public static final String TRACKING_ID   = "tracking-id";
+    public static final String HOST_NAME     = "host-name";
+    public static final String USE_METRICS   = "use-metrics";
+    public static final String USE_SIGNSHOP  = "use-signshop";
+    public static final String IN_BUNGEECORD = "in-bungeecord";
 
     private OpenAnalyticsConfig() {
         // Prevent instantiation
+    }
+
+    // Set Defautlts
+    public static void setDefaults() {
+
     }
 
     // Tracking ID
@@ -72,6 +79,34 @@ public class OpenAnalyticsConfig {
 
     public static void setUseMetrics(boolean useMetrics) {
         OpenAnalytics.getInstance().getConfig().set(USE_METRICS, useMetrics);
+        OpenAnalytics.getInstance().saveConfig();
+    }
+
+    // Use SignShop
+
+    public static Boolean getUseSignShop() {
+        if (OpenAnalytics.getInstance().getConfig().contains(USE_SIGNSHOP)) {
+            return OpenAnalytics.getInstance().getConfig().getBoolean(USE_SIGNSHOP);
+        }
+        return null;
+    }
+
+    public static void setUseSignShop(boolean useSignShop) {
+        OpenAnalytics.getInstance().getConfig().set(USE_SIGNSHOP, useSignShop);
+        OpenAnalytics.getInstance().saveConfig();
+    }
+
+    // In BungeeCord
+
+    public static Boolean getInBungeeCord() {
+        if (OpenAnalytics.getInstance().getConfig().contains(IN_BUNGEECORD)) {
+            return OpenAnalytics.getInstance().getConfig().getBoolean(IN_BUNGEECORD);
+        }
+        return null;
+    }
+
+    public static void setInBungeeCord(boolean inBungeeCord) {
+        OpenAnalytics.getInstance().getConfig().set(IN_BUNGEECORD, inBungeeCord);
         OpenAnalytics.getInstance().saveConfig();
     }
 }

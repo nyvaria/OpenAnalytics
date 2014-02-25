@@ -21,15 +21,14 @@
  */
 package net.nyvaria.openanalytics.bungee.client;
 
+import com.google.common.io.ByteStreams;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import net.nyvaria.openanalytics.bungee.OpenAnalyticsBungee;
-import org.apache.commons.lang.ObjectUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -38,6 +37,7 @@ import java.util.logging.Level;
  * @author Paul Thompson
  */
 public class ClientConfig {
+    private static final String DEFAULT_PLAYER_CONFIG_RESOURCE = "player.yml";
     private static final String ANONYMIZED_ID = "anonymized-id";
     private static final String OPT_OUT = "opt-out";
 
@@ -57,34 +57,10 @@ public class ClientConfig {
 
         // Load the config
         playerConfig = loadPlayerConfig();
-        boolean changed = false;
 
         // Create attributes in the player config if they are missing
-        try {
-            anonymizedID = UUID.fromString(playerConfig.getString(ANONYMIZED_ID));
-        } catch (NullPointerException e) {
-            anonymizedID = null;
-        }
-
-        if (anonymizedID == null) {
-            anonymizedID = UUID.randomUUID();
-            playerConfig.set(ANONYMIZED_ID, anonymizedID.toString());
-            changed = true;
-        }
-
-        try {
-            optout = playerConfig.getBoolean(OPT_OUT);
-        } catch (NullPointerException e) {
-            optout = null;
-        }
-
-        if (optout == null) {
-            optout = false;
-            playerConfig.set(OPT_OUT, optout);
-            changed = true;
-        }
-
-        if (changed) {
+        if (playerConfig.getString(ANONYMIZED_ID).isEmpty() || (playerConfig.getString(ANONYMIZED_ID) == "0")) {
+            playerConfig.set(ANONYMIZED_ID, UUID.randomUUID().toString());
             savePlayerConfig();
         }
 
@@ -131,21 +107,26 @@ public class ClientConfig {
         if (playerConfigFile.isFile()) {
             // Attempt to load the player configuration file
             try {
-                OpenAnalyticsBungee.getInstance().log(Level.INFO, "Loading player configuration file - %1$s", playerConfigFile.getName());
+                OpenAnalyticsBungee.getInstance().log(Level.FINE, "Loading player configuration file - %1$s", playerConfigFile.getName());
                 config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(playerConfigFile);
             } catch (IOException e) {
                 OpenAnalyticsBungee.getInstance().log(Level.WARNING, "Cannot read player configuration file - %1$s", playerConfigFile.getName());
                 e.printStackTrace();
             }
 
-        } else {
+        } else if (!playerConfigFile.exists()) {
             // Attempt to create a new player configuration file
             try {
                 OpenAnalyticsBungee.getInstance().log(Level.INFO, "Player configuration file not found");
                 OpenAnalyticsBungee.getInstance().log(Level.INFO, "Creating new player configuration file - %1$s", playerConfigFile.getName());
 
-                // Create and load the new file
+                // Create a default player config file
                 playerConfigFile.createNewFile();
+                InputStream in = OpenAnalyticsBungee.getInstance().getResourceAsStream(ClientConfig.DEFAULT_PLAYER_CONFIG_RESOURCE);
+                OutputStream out = new FileOutputStream(playerConfigFile);
+                ByteStreams.copy(in, out);
+
+                // And then load it
                 config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(playerConfigFile);
 
             } catch (IOException e) {
